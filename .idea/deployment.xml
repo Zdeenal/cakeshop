@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" serverName="cakeshop.zhtools.cz" deleteMissingItems="true" createEmptyFolders="true" uploadOnCheckin="178faf7c-5234-442c-a7ff-98a5d8d27729">
+    <serverData>
+      <paths name="cakeshop.zhtools.cz">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/cakeshop" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+    <option name="myUploadOnCheckinName" value="cakeshop.zhtools.cz" />
+  </component>
+</project>

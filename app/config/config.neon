@@ -6,6 +6,10 @@ application:
 	mapping:
 		*: App\*Module\Presenters\*Presenter
 
+database:
+    dsn: 'mysql:host=127.0.0.1;dbname=zhtoolscz9'
+    user: zhtools.cz
+    password: kaczena8956
 
 session:
 	expiration: 14 days
