@@ -3,8 +3,10 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-
-	<title>{ifset title}{include title|stripHtml} | {/ifset}Nette Web</title>
+	{block styles}
+		<link href="{$basePath}/css/style.css" rel="stylesheet" type="text/css">
+	{/block}
+	<title>{ifset title}{include title|stripHtml} | {/ifset}Cakeshop</title>
 </head>
 
 <body>
