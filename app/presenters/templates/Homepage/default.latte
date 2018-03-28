@@ -1,4 +1,5 @@
 {block content}
+  <div class="container">
   <h1 n:block="title">Muj blog</h1>
 
     <div n:foreach="$posts as $post" class="post">
@@ -6,5 +7,6 @@
       <h2><a n:href="Post:show $post->id">{$post->title}</a></h2>
       <div>{$post->content}</div>
     </div>
+  </div>
 
 {/block}
