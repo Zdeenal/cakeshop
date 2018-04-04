@@ -11,7 +11,7 @@ database:
     user: zhtools.cz
     password: kaczena8956
     options:
-        lazy: yes
+        lazy: true
 
 session:
 	expiration: 14 days
