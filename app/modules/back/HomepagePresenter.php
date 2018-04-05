@@ -3,6 +3,7 @@
   namespace App\Back\Presenters;
   
   use Nette;
+  use Tracy\Debugger;
   use Tracy\Dumper;
 
   /**
