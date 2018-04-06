@@ -1,6 +1,6 @@
 <?php
   
-  namespace App\Back\Factory;
+  namespace App\Common\Factory;
   
   use App\Common\Components\Forms\BSForm;
   use Nette;
