@@ -19,7 +19,7 @@ session:
 
 services:
 	router: App\RouterFactory::createRouter
-	-   App\Back\Components\Forms\SignFormFactory
+	-   App\Back\Factory\SignFormFactory
 	-
 	     factory: App\Back\Services\Authenticator
 	     autowired: self

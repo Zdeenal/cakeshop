@@ -1,7 +1,8 @@
 <?php
   
-  namespace App\Back\Components\Forms;
+  namespace App\Back\Factory;
   
+  use App\Common\Components\Forms\BSForm;
   use Nette;
   use Nette\Application\UI\Form;
   use Nette\Security\User;
@@ -25,7 +26,7 @@
      */
     public function create()
     {
-      $form = new Form;
+      $form = new BSForm();
       $form->addText('username', 'Username:')
         ->setRequired('Please enter your username.');
       

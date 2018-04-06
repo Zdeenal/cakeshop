@@ -2,7 +2,7 @@
   
   namespace App\Back\Presenters;
   
-  use App\Back\Components\Forms\SignFormFactory;
+  use App\Back\Factory\SignFormFactory;
   use App\Back\Services\Authenticator;
   use Nette;
   
