@@ -17,6 +17,11 @@
 </head>
 
 <body class="container">
+<div>
+	<a n:href="Login:out" n:if="$user->isLoggedIn()">odhlásit</a>
+	<a n:href="User:" n:if="$user->isLoggedIn()">Můj profil</a>
+	<a n:href="Login:in" n:if="!$user->isLoggedIn()">přihlásit</a>
+</div>
 	<h1>{$className}</h1>
 	<div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
 

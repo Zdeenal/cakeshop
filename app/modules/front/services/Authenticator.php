@@ -1,5 +1,5 @@
 <?php
-  namespace App\Back\Services;
+  namespace App\Front\Services;
   use Nette\Database\Context;
   use Nette\Security\AuthenticationException;
   use Nette\Security\IAuthenticator;
@@ -34,7 +34,7 @@
         throw new AuthenticationException('Invalid password.');
       }
 
-      elseif (!in_array($row->module->name, ['back','common'])) {
+      elseif (!in_array($row->module->name, ['front','common'])) {
         throw new AuthenticationException('Invalid user module.');
       }
       

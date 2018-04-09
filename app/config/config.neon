@@ -23,3 +23,7 @@ services:
 	-
 	     factory: App\Back\Services\Authenticator
 	     autowired: self
+	-
+	    factory: App\Front\Services\Authenticator
+	    autowired: self
+
