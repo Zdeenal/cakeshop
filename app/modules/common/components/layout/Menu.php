@@ -1,7 +1,8 @@
 <?php
   namespace App\Common\Components\Layout;
   use Nette\Application\UI\Control;
-  
+  use Nette\Database\Table\ActiveRow;
+  use Tracy\Dumper;
 
 
   /**
@@ -22,8 +23,42 @@
     public function render(...$args) {
       $template = $this->template;
       $template->setFile(__DIR__ . $this->templateFile);
-      $template->items = $this->items;
+      $template->items = $this->createItemsTree($this->items->fetchAll());
+      Dumper::dump($template->items);
       $template->render();
+    }
+  
+    public function handleClick($presenter , $action) {
+      $this->presenter->redirect($presenter . ':' . $action);
+      $this->redrawControl();
+    }
+  
+    private function createItemsTree($items, $parent = NULL) {
+      if ($parent === NULL) {
+        $items = array_map(function(&$item){
+          $item = $item->toArray();
+          $item['link'] =
+            $item['presenter'] || $item['action'] ?
+            $this->presenter->link($item['presenter'] . ':' . $item['action']) : '#';
+          return $item;
+        }, $items);
+        $menus = array_filter($items, function($item){
+            return !$item['parent_menu_item_id'];
+        });
+      } else {
+        $menus = array_filter($items, function($item) use ($parent){
+          return $item['parent_menu_item_id'] == $parent;
+        });
+      }
+  
+      foreach ($menus as &$menu) {
+        /* @var $menu MenuEntity */
+        $children = $this->createItemsTree($items , $menu['menu_item_id']);
+        if ($children) {
+          $menu['children'] = $children;
+        }
+      }
+      return $menus;
     }
   
   }

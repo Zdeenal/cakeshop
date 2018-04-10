@@ -1,3 +1,29 @@
-<div n:if="count($items)" class="menu">
+<div n:if="count($items)" class="navbar-default sidebar" role="navigation">
+  <div class="sidebar-nav navbar-collapse">
+    <ul class="nav in" id="side-menu">
+
+      <li class="sidebar-search">
+        <div class="input-group custom-search-form">
+          <input type="text" class="form-control" placeholder="Hledat...">
+          <span class="input-group-btn">
+                                <button class="btn btn-default" type="button">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+        </div>
+      </li>
+
+      <li
+        n:class="$presenter->isLinkCurrent($item['presenter'] .':') ? active"
+        n:foreach="$items as $item">
+        <a href="{$item['link']}">
+          <i class="fa fa-{$item['icon']} fa-fw"></i>
+          {$item['title']}
+        </a>
+      </li>
+
+    </ul>
+
+  </div>
 
 </div>

@@ -19,7 +19,6 @@
     }
   
     public function render(...$args) {
-      Dumper::dump($this->items);
       parent::render(...$args);
     }
   
