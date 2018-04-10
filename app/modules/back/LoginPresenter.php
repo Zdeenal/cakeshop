@@ -14,7 +14,7 @@
    */
   class LoginPresenter extends BasePresenter
   {
-    
+    protected $includeMenu = FALSE;
     /** @var Nette\Database\Context */
     private $database;
     

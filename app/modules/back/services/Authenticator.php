@@ -27,11 +27,11 @@
         ->where('username', $username)->fetch();
   
       if (!$row) {
-        throw new AuthenticationException('User not found.');
+        throw new AuthenticationException('Neexistující uživatel ' . $username . '.');
       }
   
       elseif (!Passwords::verify($password, $row->password)) {
-        throw new AuthenticationException('Invalid password.');
+        throw new AuthenticationException('Chybné heslo pro uživatele ' . $username . '.');
       }
 
       elseif (!in_array($row->module->name, ['back','common'])) {

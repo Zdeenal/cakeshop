@@ -11,6 +11,7 @@ use App\Model;
  */
 abstract class BasePresenter extends Nette\Application\UI\Presenter
 {
+  protected $module = 'front';
   protected $secured = FALSE;
   
   protected function startup() {
