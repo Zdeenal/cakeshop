@@ -7,28 +7,38 @@
 <html>
 <head>
 	<meta charset="utf-8">
-
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="BackEnd Admin">
+	<meta name="author" content="Zdeněk Houdek">
 	<title>{ifset title}{include title|striptags} | {/ifset}CakeShop</title>
 
+	<link rel="stylesheet" href="{$basePath}/admin_theme/vendor/bootstrap/css/bootstrap.min.css"/>
+	<link rel="stylesheet" href="{$basePath}/admin_theme/vendor/metisMenu/metisMenu.min.css"/>
+	<link rel="stylesheet" href="{$basePath}/admin_theme/less/sb-admin-2.css"/>
+	<link rel="stylesheet" href="{$basePath}/admin_theme/vendor/font-awesome/css/font-awesome.min.css"/>
+
 	<link rel="stylesheet" href="{$basePath}/css/style.css">
-	<meta name="viewport" content="width=device-width">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
 	{block head}{/block}
 </head>
 
-<body class="container">
+<body>
 	<div>
 		<a n:href="Login:out" n:if="$user->isLoggedIn()">odhlásit</a>
 	</div>
-	<h1>{$className}</h1>
 	<div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
 
-
-	{include content}
-
+	<div class="container">
+		{include content}
+	</div>
 
 	{block scripts}
-	<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+	<script src="{$basePath}/admin_theme/vendor/jquery/jquery.min.js"></script>
+	<script src="{$basePath}/admin_theme/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script src="{$basePath}/admin_theme/vendor/metisMenu/metisMenu.min.js"></script>
+	<script src="{$basePath}/admin_theme/vendor/raphael/raphael.min.js"></script>
+	<script src="{$basePath}/admin_theme/dist/js/sb-admin-2.js"></script>
 	<script src="//nette.github.io/resources/js/netteForms.min.js"></script>
 	<script src="{$basePath}/js/main.js"></script>
 	{/block}

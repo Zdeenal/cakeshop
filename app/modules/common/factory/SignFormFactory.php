@@ -3,6 +3,7 @@
   namespace App\Common\Factory;
   
   use App\Common\Components\Forms\BSForm;
+  use App\Common\Components\Forms\SignForm;
   use Nette;
   use Nette\Application\UI\Form;
   use Nette\Security\User;
@@ -26,16 +27,18 @@
      */
     public function create()
     {
-      $form = new BSForm();
-      $form->addText('username', 'Username:')
-        ->setRequired('Please enter your username.');
+      $form = new SignForm();
+      $form->addText('username')
+        ->setRequired('Zadejte uživatelské jméno.')
+        ->controlPrototype->setAttribute('placeholder','Jméno');
       
-      $form->addPassword('password', 'Password:')
-        ->setRequired('Please enter your password.');
+      $form->addPassword('password')
+        ->setRequired('Zadejte heslo.')
+        ->controlPrototype->setAttribute('placeholder','Heslo');
       
-      $form->addCheckbox('remember', 'Keep me signed in');
+      $form->addCheckbox('remember', 'Zapamatovat přihlášení');
       
-      $form->addSubmit('send', 'Sign in');
+      $form->addSubmit('send', 'Přihlásit');
       
       $form->onSuccess[] = array($this, 'formSucceeded');
       return $form;
