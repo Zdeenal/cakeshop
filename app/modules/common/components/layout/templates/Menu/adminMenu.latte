@@ -1,28 +1,46 @@
+
+
+
 <div n:if="count($items)" class="navbar-default sidebar" role="navigation">
-  <div class="sidebar-nav navbar-collapse">
-    <ul class="nav in" id="side-menu">
+  <div class="sidebar-nav">
 
-      <li class="sidebar-search">
-        <div class="input-group custom-search-form">
-          <input type="text" class="form-control" placeholder="Hledat...">
-          <span class="input-group-btn">
-                                <button class="btn btn-default" type="button">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                            </span>
-        </div>
-      </li>
 
-      <li
-        n:class="$presenter->isLinkCurrent($item['presenter'] .':') ? active"
-        n:foreach="$items as $item">
-        <a href="{$item['link']}">
-          <i class="fa fa-{$item['icon']} fa-fw"></i>
-          {$item['title']}
-        </a>
-      </li>
+      <ul class="metismenu nav" id="side-menu">
+        <li
 
-    </ul>
+          n:foreach="$items as $item">
+          <a href="{$item['link']}"
+            n:class="$item['link'] == '#' ? has-arrow"
+             aria-expanded="false"
+          >
+            <i class="fa fa-{$item['icon']} fa-fw"></i>
+            {$item['title']}
+          </a>
+          <ul n:if="isset($item['children'])" class="nav nav-second-level collapse" aria-expanded="false">
+            <li
+              n:class="$presenter->isLinkCurrent($seccondItem['presenter'] .':') ? active"
+              n:foreach="$item['children'] as $seccondItem">
+              <a href="{$seccondItem['link']}" aria-expanded="false" n:class="$seccondItem['link'] == '#' ? has-arrow" >
+                <i class="fa fa-{$seccondItem['icon']} fa-fw"></i>
+                {$seccondItem['title']}
+              </a>
+
+              <ul n:if="isset($seccondItem['children'])" class="nav nav-third-level collapse" aria-expanded="false">
+                <li
+                  n:class="$presenter->isLinkCurrent($thirdItem['presenter'] .':') ? active"
+                  n:foreach="$seccondItem['children'] as $thirdItem">
+                  <a href="{$thirdItem['link']}" aria-expanded="false" n:class="$thirdItem['link'] == '#' ? has-arrow">
+                    <i class="fa fa-{$thirdItem['icon']} fa-fw"></i>
+                    {$thirdItem['title']}
+                  </a>
+                </li>
+              </ul>
+
+            </li>
+          </ul>
+        </li>
+      </ul>
+
 
   </div>
 

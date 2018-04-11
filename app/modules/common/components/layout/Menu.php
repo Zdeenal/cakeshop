@@ -24,7 +24,6 @@
       $template = $this->template;
       $template->setFile(__DIR__ . $this->templateFile);
       $template->items = $this->createItemsTree($this->items->fetchAll());
-      Dumper::dump($template->items);
       $template->render();
     }
   
