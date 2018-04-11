@@ -25,6 +25,7 @@
 <body>
 
 	<div id="wrapper">
+		{if $presenter->isIncludeMenu()}
 		<nav class="navbar navbar-default navbar-static-top">
 
 			<div class="navbar-header">
@@ -40,8 +41,13 @@
       {control menu}
 
 		</nav>
+		{/if}
 
+    {if $presenter->isIncludeMenu()}
 		<div id="page-wrapper">
+		{else}
+		<div>
+		{/if}
 				{include content}
 		</div>
 

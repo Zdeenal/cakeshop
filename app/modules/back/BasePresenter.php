@@ -46,4 +46,10 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
     parent::checkRequirements($element);
   }
   
+  /**
+   * @return bool
+   */
+  public function isIncludeMenu() {
+    return $this->includeMenu;
+  }
 }
