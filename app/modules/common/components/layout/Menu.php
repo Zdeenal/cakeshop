@@ -1,8 +1,6 @@
 <?php
   namespace App\Common\Components\Layout;
   use Nette\Application\UI\Control;
-  use Nette\Database\Table\ActiveRow;
-  use Tracy\Dumper;
 
 
   /**

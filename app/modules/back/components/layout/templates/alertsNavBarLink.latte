@@ -1,0 +1,9 @@
+<li n:class="!$alerts ? 'dropdown disabled' : 'dropdown'">
+   <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="true">
+      <i class="fa fa-bell fa-fw"></i>
+      <i n:if="$alerts" class="fa fa-caret-down"></i>
+   </a>
+   <ul n:if="$alerts" class="dropdown-menu dropdown-alerts">
+
+   </ul>
+</li>

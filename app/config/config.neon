@@ -21,6 +21,7 @@ services:
 	router: App\RouterFactory::createRouter
 	-   App\Common\Factory\SignFormFactory
 	-   App\Common\Factory\MenuFactory
+	-   App\Back\Factories\NavBarLinksFactory
 	-
 	     factory: App\Back\Services\Authenticator
 	     autowired: self

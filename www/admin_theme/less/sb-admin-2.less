@@ -19,6 +19,62 @@ body {
              color: @themeColor1;
          }
         }
+        .navbar-top-links {
+            .dropdown {
+                &.disabled {
+                    .dropdown-toggle {
+                        color: @themeColorDisabled;
+                        &:hover {
+                            background-color: @themeBgColor1;
+                        }
+                    }
+                }
+                .dropdown-toggle {
+                    color: @themeColor1;
+                    &:hover  {
+                        background-color: @themeBgColor3;
+                    }
+                }
+                &.open {
+                    background-color: @themeBgColor3;
+                    .dropdown-toggle {
+                        background-color: @themeBgColor3;
+                    }
+                    &.disabled {
+                        background-color: @themeBgColor1;
+                        .dropdown-toggle {
+                            background-color: @themeBgColor1;
+                        }
+                    }
+                }
+                .dropdown-menu {
+                    -webkit-border-radius: 0;
+                    -moz-border-radius: 0;
+                    border-radius: 0;
+                    border-color: @themeBgColor3;
+                    margin: 0;
+                    padding: 0;
+                    li {
+                        padding: 5px 2px;
+                        background-color: @themeBgColor3;
+                        a {
+                            color: @themeColor3;
+
+                        }
+                        &:hover {
+                            background-color: @themeColor2;
+                            a {
+                                color: @themeColor3;
+                                &:hover {
+                                    background-color: @themeColor2;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
     }
     .sidebar {
         background-color: @themeBgColor1;
@@ -46,9 +102,22 @@ body {
         background-color: @themeColor2;
         border-color: @themeBgColor2;
         &:hover {
-            color: @themeColor2;
-            background-color: @themeBgColor2;
-            border-color: @themeColor2;
+            color: @themeColor3;
+            background-color: @themeBgColor3;
+            border-color: @themeColor3;
+
+        }
+
+    }
+
+    .btn-theme-invert {
+        color: @themeColor2;
+        background-color: @themeBgColor2;
+        border-color: @themeColor2;
+        &:hover {
+            color: @themeBgColor3;
+            background-color: @themeColor3;
+            border-color: @themeBgColor3;
 
         }
 

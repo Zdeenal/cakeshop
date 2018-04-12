@@ -25,7 +25,7 @@
       $this->getElementPrototype()->setAttribute('class', 'form-no-labels')->setAttribute('role', 'form');
       foreach ($this->getControls() as $control) {
         if ($control instanceof Controls\Button) {
-          $control->getControlPrototype()->addClass(empty($usedPrimary) ? 'btn btn-lg btn-success btn-block' : 'btn btn-default');
+          $control->getControlPrototype()->addClass(empty($usedPrimary) ? 'btn btn-lg btn-theme btn-block' : 'btn btn-default');
           $usedPrimary = TRUE;
         } elseif ($control instanceof Controls\TextBase || $control instanceof Controls\SelectBox || $control instanceof Controls\MultiSelectBox) {
           $control->getControlPrototype()->addClass('form-control');

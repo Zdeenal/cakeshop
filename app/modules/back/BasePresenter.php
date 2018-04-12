@@ -3,6 +3,8 @@
 namespace App\Back\Presenters;
 
 
+use App\Back\Components\Layout\NavBarLinks;
+use App\Back\Factories\NavBarLinksFactory;
 use App\Common\Components\Layout\Dummy;
 use App\Common\Factory\MenuFactory;
 use Nette;
@@ -16,6 +18,9 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 {
   protected $module = 'back';
   protected $includeMenu = TRUE;
+  
+  /** @var NavBarLinksFactory @inject*/
+  public $navBarLinksFactory;
   
   /** @var MenuFactory @inject*/
   public $menuFactory;
@@ -34,6 +39,10 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
   
   protected function createComponentMenu() {
     return $this->includeMenu ? $this->menuFactory->create($this->module) : new Dummy();
+  }
+  
+  public function createComponentNavBarLinks() {
+    return $this->includeMenu ? new NavBarLinks($this->navBarLinksFactory) : new Dummy();
   }
   
   protected function beforeRender() {
