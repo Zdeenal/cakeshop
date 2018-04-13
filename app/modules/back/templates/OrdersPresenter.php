@@ -5,12 +5,12 @@
   use Nette;
   
   /**
-   * Class UserPresenter
+   * Class OrdersPresenter
    *
    * @author  Zdeněk Houdek
-   * @created 04.04.2018
+   * @created 13.04.2018
    */
-  class UserPresenter extends BasePresenter
+  class OrdersPresenter extends BasePresenter
   {
     
     /** @var Nette\Database\Context */
@@ -18,10 +18,6 @@
     
     public function __construct(Nette\Database\Context $database) {
       $this->database = $database;
-    }
-  
-    public function renderRights() {
-    
     }
     
   }

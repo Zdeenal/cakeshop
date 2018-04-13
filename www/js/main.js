@@ -30,3 +30,11 @@ Nette.showFormErrors = function(form, errors) {
     }
   }
 };
+
+$(document).ready(function(){
+
+  /** Side menu opened submanu triger class adjustment */
+  $('#side-menu li ul li a.active').parents('li').addClass('active');
+
+
+});

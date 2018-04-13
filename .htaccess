@@ -1,2 +1,5 @@
-Order Allow,Deny
-Deny from all
+RewriteEngine On
+RewriteCond %{HTTP_HOST} ^(www\.)?cakeshop.zhtools\.cz$
+RewriteRule ^$ www/ [L]
+RewriteCond %{HTTP_HOST} ^(www\.)?cakeshop.zhtools\.cz$
+RewriteRule (.*) www/$1 [L]
