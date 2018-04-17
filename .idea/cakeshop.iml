@@ -25,53 +25,5 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library">
-      <library name="PHP" type="php">
-        <CLASSES>
-          <root url="file://$MODULE_DIR$/vendor/composer" />
-          <root url="file://$MODULE_DIR$/vendor/latte/latte" />
-          <root url="file://$MODULE_DIR$/vendor/nette/application" />
-          <root url="file://$MODULE_DIR$/vendor/nette/bootstrap" />
-          <root url="file://$MODULE_DIR$/vendor/nette/caching" />
-          <root url="file://$MODULE_DIR$/vendor/nette/component-model" />
-          <root url="file://$MODULE_DIR$/vendor/nette/database" />
-          <root url="file://$MODULE_DIR$/vendor/nette/di" />
-          <root url="file://$MODULE_DIR$/vendor/nette/finder" />
-          <root url="file://$MODULE_DIR$/vendor/nette/forms" />
-          <root url="file://$MODULE_DIR$/vendor/nette/http" />
-          <root url="file://$MODULE_DIR$/vendor/nette/mail" />
-          <root url="file://$MODULE_DIR$/vendor/nette/neon" />
-          <root url="file://$MODULE_DIR$/vendor/nette/php-generator" />
-          <root url="file://$MODULE_DIR$/vendor/nette/reflection" />
-          <root url="file://$MODULE_DIR$/vendor/nette/robot-loader" />
-          <root url="file://$MODULE_DIR$/vendor/nette/security" />
-          <root url="file://$MODULE_DIR$/vendor/nette/tester" />
-          <root url="file://$MODULE_DIR$/vendor/nette/utils" />
-          <root url="file://$MODULE_DIR$/vendor/tracy/tracy" />
-        </CLASSES>
-        <SOURCES>
-          <root url="file://$MODULE_DIR$/vendor/composer" />
-          <root url="file://$MODULE_DIR$/vendor/latte/latte" />
-          <root url="file://$MODULE_DIR$/vendor/nette/application" />
-          <root url="file://$MODULE_DIR$/vendor/nette/bootstrap" />
-          <root url="file://$MODULE_DIR$/vendor/nette/caching" />
-          <root url="file://$MODULE_DIR$/vendor/nette/component-model" />
-          <root url="file://$MODULE_DIR$/vendor/nette/database" />
-          <root url="file://$MODULE_DIR$/vendor/nette/di" />
-          <root url="file://$MODULE_DIR$/vendor/nette/finder" />
-          <root url="file://$MODULE_DIR$/vendor/nette/forms" />
-          <root url="file://$MODULE_DIR$/vendor/nette/http" />
-          <root url="file://$MODULE_DIR$/vendor/nette/mail" />
-          <root url="file://$MODULE_DIR$/vendor/nette/neon" />
-          <root url="file://$MODULE_DIR$/vendor/nette/php-generator" />
-          <root url="file://$MODULE_DIR$/vendor/nette/reflection" />
-          <root url="file://$MODULE_DIR$/vendor/nette/robot-loader" />
-          <root url="file://$MODULE_DIR$/vendor/nette/security" />
-          <root url="file://$MODULE_DIR$/vendor/nette/tester" />
-          <root url="file://$MODULE_DIR$/vendor/nette/utils" />
-          <root url="file://$MODULE_DIR$/vendor/tracy/tracy" />
-        </SOURCES>
-      </library>
-    </orderEntry>
   </component>
 </module>

@@ -19,6 +19,7 @@ session:
 
 services:
 	router: App\RouterFactory::createRouter
+	webDir: App\Services\WebDir(%wwwDir%)
 	-   App\Common\Factory\SignFormFactory
 	-   App\Common\Factory\MenuFactory
 	-   App\Back\Factories\NavBarLinksFactory

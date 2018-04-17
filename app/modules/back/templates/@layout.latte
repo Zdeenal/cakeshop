@@ -13,23 +13,11 @@
 	<meta name="author" content="Zdeněk Houdek">
 	<title>{ifset title}{include title|striptags} | {/ifset}CakeShop</title>
 
-	<link rel="preload" href="{$basePath}/admin_theme/vendor/jquery/jquery.min.js" as="script" />
-	<link rel="preload" href="{$basePath}/admin_theme/vendor/bootstrap/js/bootstrap.min.js" as="script" />
-	<link rel="preload" href="//cdnjs.cloudflare.com/ajax/libs/metisMenu/2.7.1/metisMenu.min.js" as="script" />
-	<link rel="preload" href="{$basePath}/admin_theme/vendor/raphael/raphael.min.js" as="script" />
-	<link rel="preload" href="{$basePath}/admin_theme/dist/js/sb-admin-2.js" as="script" />
-	<link rel="preload" href="//nette.github.io/resources/js/netteForms.min.js" as="script" />
-	<link rel="preload" href="{$basePath}/js/main.js" as="script" />
-	<link rel="preload" href="{$basePath}/admin_theme/vendor/font-awesome/fonts/fontawesome-webfont.woff2?v=4.6.3" as="font" />
-	<link rel="preload" href='http://fonts.googleapis.com/css?family=Didact+Gothic&subset=latin,latin-ext' as="font" />
+  {** Preloads *}
+	<link n:foreach="$preloads as $preload" rel="preload"  href="{$preload['href']}" as="{$preload['as']}" />
 
-	<link href='http://fonts.googleapis.com/css?family=Didact+Gothic&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
-	<link rel="stylesheet" href="{$basePath}/admin_theme/vendor/bootstrap/css/bootstrap.min.css"/>
-	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/metisMenu/2.7.1/metisMenu.min.css">
-	<link rel="stylesheet" href="{$basePath}/admin_theme/less/sb-admin-2.css"/>
-	<link rel="stylesheet" href="{$basePath}/admin_theme/vendor/font-awesome/css/font-awesome.min.css"/>
-
-	<link rel="stylesheet" href="{$basePath}/css/style.css">
+	{** Styles *}
+	<link n:foreach="$styles as $style" rel="stylesheet" type="text/css" href="{$style['href']}" />
 
 	{block head}{/block}
 </head>
@@ -62,18 +50,14 @@
 		<div>
 		{/if}
 				{include content}
-		</div>
 
+		</div>
+		</div>
 	</div>
 
 	{block scripts}
-	<script src="{$basePath}/admin_theme/vendor/jquery/jquery.min.js"></script>
-	<script src="{$basePath}/admin_theme/vendor/bootstrap/js/bootstrap.min.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/metisMenu/2.7.1/metisMenu.min.js"></script>
-	<script src="{$basePath}/admin_theme/vendor/raphael/raphael.min.js"></script>
-	<script src="{$basePath}/admin_theme/dist/js/sb-admin-2.js"></script>
-	<script src="//nette.github.io/resources/js/netteForms.min.js"></script>
-	<script src="{$basePath}/js/main.js"></script>
+	{** Scripts *}
+		<script n:foreach="$scripts as $script"  src="{$script['src']}" ></script>
 	{/block}
 </body>
 </html>
