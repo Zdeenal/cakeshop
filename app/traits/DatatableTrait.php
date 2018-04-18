@@ -21,6 +21,7 @@
     protected $id = '';
     protected $columns = [];
     protected $columnsToPrefix = [];
+    protected $columnsWithOperators = [];
     
   
     protected function beforeRender() {
@@ -31,7 +32,15 @@
     public function actiongetData() {
       $table = $this->getTable();
       $response    = [];
-      $queryParams = Datatable::prepareQueryParams($this->getParameters(),$this->getDataColumns(), $this->columnsToPrefix , $this->getTable());
+      $queryParams = Datatable::prepareQueryParams(
+        $this->getParameters(),
+        $this->getDataColumns(),
+        $this->columnsToPrefix ,
+        $this->getTable(),
+        $this->columnsWithOperators
+      );
+      
+      
       $items      = $this->database->table($table);
       $totalCount = $items->count();
       if ($queryParams['order']) {$items->order($queryParams['order']);}
@@ -79,11 +88,20 @@
     public function setDTColumns($columns) {
       $this->columns = $columns;
       foreach ($columns as $column) {
-        if (is_array($column) && Arrays::get($column,'prefixTableName', FALSE)) {
-          $this->columnsToPrefix[] = Arrays::get($column, 'column', FALSE) ? $column['column'] : $column;
+        
+        if (is_array($column)) {
+          if (Arrays::get($column,'prefixTableName', FALSE)) {
+            $this->columnsToPrefix[] = Arrays::get($column, 'column', FALSE) ? $column['column'] : $column;
+          }
+          
+          if (Arrays::get($column,'operator', FALSE)) {
+            $this->columnsWithOperators[$column['column']] = $column['operator'];
+          }
         }
       }
     }
+    
+    
   
     /**
      * @return array

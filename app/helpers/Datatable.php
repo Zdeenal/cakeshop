@@ -12,23 +12,23 @@
   class Datatable
   {
     
-    static public function prepareQueryParams($datatablesRequest,$realColumns =[], $columnsToPrefix =[] , $tablename ='') {
+    static public function prepareQueryParams($datatablesRequest,$realColumns =[], $columnsToPrefix =[] , $tablename ='', $columnsWithOperator = []) {
       $columns = Arrays::get($datatablesRequest, 'tableColumns',[]);
       $params = [];
       $params['order'] = [];
       $params['where'] = [];
-      
       $search = Arrays::get($datatablesRequest,['search', 'value'] , '');
       if ($search) {
         $query = [];
         $values = [];
         foreach ($realColumns as $realColumn) {
-          $query[] = self::prefixTablename($realColumn, $columnsToPrefix, $tablename);
-          $values[] = '%' . $search . '%';
+          $operator = array_key_exists($realColumn, $columnsWithOperator) ? $columnsWithOperator[$realColumn] : 'LIKE';
+          $query[] = self::prefixTablename($realColumn, $columnsToPrefix, $tablename) . ' ' . $operator;
+          $values[] = ($operator == 'LIKE' ? '%' : '') . $search . ($operator == 'LIKE' ? '%' : '');
         }
-      
+        
         $params['where'] = [
-          'query' => implode(' LIKE ? OR ', $query) . ' LIKE ?',
+          'query' => implode(' ? OR ', $query) . ' ?',
           'values' => $values
         ];
       }
