@@ -28,8 +28,8 @@
     protected function startup() {
       parent::startup();
       $this->setDTColumns([
-        'Id skupiny'  => 'user_group_id',
-        'Název'       => 'name',
+        'Id skupiny'  => ['column' => 'user_group_id', 'prefixTableName' => TRUE],
+        'Název'       => ['column' => 'name', 'prefixTableName' => TRUE],
         'Rodič'       => 'parent_group.name',
        ]
       );

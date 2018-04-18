@@ -4,7 +4,8 @@
   use App\Helpers\Datatable;
   use Nette\Application\Responses\JsonResponse;
   use Nette\Database\Table\ActiveRow;
-  use Tester\Dumper;
+  use Nette\Utils\Arrays;
+  use Tracy\Dumper;
 
 
   /**
@@ -19,6 +20,7 @@
     protected $table = '';
     protected $id = '';
     protected $columns = [];
+    protected $columnsToPrefix = [];
     
   
     protected function beforeRender() {
@@ -29,11 +31,12 @@
     public function actiongetData() {
       $table = $this->getTable();
       $response    = [];
-      $queryParams = Datatable::prepareQueryParams($this->getParameters(),$this->columns);
-      $totalCount = $this->database->table($table)->count();
+      $queryParams = Datatable::prepareQueryParams($this->getParameters(),$this->getDataColumns(), $this->columnsToPrefix , $this->getTable());
       $items      = $this->database->table($table);
+      $totalCount = $items->count();
       if ($queryParams['order']) {$items->order($queryParams['order']);}
       if ($queryParams['limit']) {$items->limit($queryParams['limit']);}
+      if ($queryParams['where']) {$items->where($queryParams['where']['query'], ...$queryParams['where']['values']);}
         
       $count = 0;
       foreach ($items as $item) {
@@ -50,7 +53,7 @@
               $value = $item->$part;
             }
             ++$i;
-          },explode('.', Datatable::getRealColumn($column, $this->columns)));
+          },explode('.', Datatable::getRealColumn($column, $this->getDataColumns())));
           $values[$column] = $value;
         }
         $response [] = $values;
@@ -75,6 +78,11 @@
      */
     public function setDTColumns($columns) {
       $this->columns = $columns;
+      foreach ($columns as $column) {
+        if (is_array($column) && Arrays::get($column,'prefixTableName', FALSE)) {
+          $this->columnsToPrefix[] = Arrays::get($column, 'column', FALSE) ? $column['column'] : $column;
+        }
+      }
     }
   
     /**
@@ -87,18 +95,26 @@
     
   
     public function getDataColumns($flatten = FALSE) {
+      $columns = array_map(function($item){
+        if(is_array($item) && Arrays::get($item, 'column')) {
+          return $item['column'];
+        } else {
+          return $item;
+        }}, $this->columns);
       if ($flatten) {
         return array_map(function($item){
           $exploded = explode('.' , $item);
-          return array_shift($exploded);
-        }, $this->columns);
+            return array_shift($exploded);
+        }, $columns);
       }
-      return $this->columns ? array_values($this->columns) : [];
+      return $columns ? array_values($columns) : [];
     }
   
     public function getHeaders() {
       return $this->columns ? array_keys($this->columns) : [];
     }
+  
+
     
     /**
      * @param string $id
