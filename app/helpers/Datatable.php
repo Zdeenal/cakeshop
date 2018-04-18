@@ -1,7 +1,6 @@
 <?php
   namespace App\Helpers;
   use Nette\Utils\Arrays;
-  use Tracy\Dumper;
 
   /**
    * Class Datatable  ...

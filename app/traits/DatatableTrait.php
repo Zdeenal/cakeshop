@@ -19,9 +19,12 @@
   {
     protected $table = '';
     protected $id = '';
+    
     protected $columns = [];
     protected $columnsToPrefix = [];
     protected $columnsWithOperators = [];
+    
+    protected $actions = [];
     
   
     protected function beforeRender() {
@@ -132,7 +135,13 @@
       return $this->columns ? array_keys($this->columns) : [];
     }
   
-
+  
+    /**
+     * @param array $actions
+     */
+    public function setDTActions($actions) {
+      $this->actions = $actions;
+    }
     
     /**
      * @param string $id

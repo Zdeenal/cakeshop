@@ -33,6 +33,16 @@
         'Rodič'       => 'parent_group.name',
        ]
       );
+      $this->setDTActions([
+        'edit' => [
+          'button' => '<button class="btn btn-theme"><i class="fa fa-pencil"</button>',
+          'action' => $this->link('edit')
+        ],
+        'delete' => [
+          'button' => '<button class="btn btn-warning"><i class="fa fa-trash"</button>',
+          'action' => $this->link('delete')
+        ]
+      ]);
     }
   
   
