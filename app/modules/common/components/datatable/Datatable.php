@@ -13,18 +13,25 @@
    */
   class Datatable extends Control
   {
-    public function render($args) {
+    public function render() {
       $template = $this->template;
-      $template->id = Arrays::get($args, 'id', 'datatable' . time());
-      $template->columns = Arrays::get($args, 'columns', '');
+      $template->id = $this->presenter->getId();
+      $template->columns = implode(',' , $this->presenter->getDataColumns(TRUE));
+      $template->headers = $this->presenter->getHeaders();
       $template->setFile(__DIR__. '/controll.latte');
       $template->render();
     }
     
-    public function renderScript($args) {
+    public function renderScript() {
       $template = $this->template;
-      $id = Arrays::get($args, 'id', 'datatable' . time());
-      $template->id = substr($id,0,1) !== '#' ? '#' . $id : $id;
+      $template->id = $this->presenter->getId(TRUE);
+      $columns = [];
+      foreach ($this->presenter->getDataColumns(TRUE) as $column) {
+        $columns[] = [
+          'data' => $column
+        ];
+      }
+      $template->columns = $columns;
       $template->setFile(__DIR__. '/script.latte');
       $template->render();
     }

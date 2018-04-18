@@ -3,7 +3,9 @@
   namespace App\Traits;
   use App\Helpers\Datatable;
   use Nette\Application\Responses\JsonResponse;
-  
+  use Nette\Database\Table\ActiveRow;
+  use Tester\Dumper;
+
 
   /**
    * Trait DatatableTrait reprezentující ...
@@ -14,6 +16,9 @@
    */
   trait DatatableTrait
   {
+    protected $table = '';
+    protected $id = '';
+    protected $columns = [];
     
   
     protected function beforeRender() {
@@ -22,38 +27,102 @@
     }
     
     public function actiongetData() {
-      $table = $this->getTableName();
+      $table = $this->getTable();
       $response    = [];
-      $queryParams = Datatable::prepareQueryParams($this->getParameters());
-  
+      $queryParams = Datatable::prepareQueryParams($this->getParameters(),$this->columns);
       $totalCount = $this->database->table($table)->count();
-      $groups      = $this->database->table($table)->select(
-        'user_group_id, name'
-      );
-      if ($queryParams['order']) {$groups->order($queryParams['order']);}
-      if ($queryParams['limit']) {$groups->limit($queryParams['limit']);}
+      $items      = $this->database->table($table);
+      if ($queryParams['order']) {$items->order($queryParams['order']);}
+      if ($queryParams['limit']) {$items->limit($queryParams['limit']);}
         
-  
-      foreach ($groups as $group) {
-        $response [] = [
-          'user_group_id'     => $group->user_group_id,
-          'name'   => $group->name,
-        ];
+      $count = 0;
+      foreach ($items as $item) {
+        $values = [];
+        foreach ($this->getParameters()['tableColumns'] as $column) {
+          $value = '';
+          $i = 1;
+          array_map(function($part) use (&$i, &$value, $item, $column){
+            if ($i > 1) {
+              if ($value instanceof ActiveRow) {
+                $value = $value->$part;
+              }
+            } else {
+              $value = $item->$part;
+            }
+            ++$i;
+          },explode('.', Datatable::getRealColumn($column, $this->columns)));
+          $values[$column] = $value;
+        }
+        $response [] = $values;
+        ++$count;
       }
-  
       return
       $this->sendResponse(new JsonResponse(
         [
           'iTotalRecords'=> $totalCount,
-          'iTotalDisplayRecords'=> $totalCount,
+          'iTotalDisplayRecords'=> $count,
           'data' => $response
         ]
       ));
     }
+  
+    protected function createComponentDatatable() {
+      return new \App\Common\Components\Layout\Datatable();
+    }
+  
+    /**
+     * @param array $columns
+     */
+    public function setDTColumns($columns) {
+      $this->columns = $columns;
+    }
+  
+    /**
+     * @return array
+     */
+    public function getColumns() {
+      return $this->columns;
+    }
+  
     
-    protected function getTableName(){
-      if (defined('self::_TABLE')) {
-        return self::_TABLE;
+  
+    public function getDataColumns($flatten = FALSE) {
+      if ($flatten) {
+        return array_map(function($item){
+          $exploded = explode('.' , $item);
+          return array_shift($exploded);
+        }, $this->columns);
+      }
+      return $this->columns ? array_values($this->columns) : [];
+    }
+  
+    public function getHeaders() {
+      return $this->columns ? array_keys($this->columns) : [];
+    }
+    
+    /**
+     * @param string $id
+     */
+    public function setDTId($id) {
+      $this->id = $id;
+    }
+    /**
+     * @return string
+     */
+    public function getId($withSelector = FALSE) {
+      $id = $this->id ? $this->id : 'datatable' . time();
+      if ($withSelector) {
+        $id = substr($id,0,1) !== '#' ? '#' . $id : $id;
+      }
+      return $id;
+    }
+    
+    public function setDTTable($table) {
+      $this->table = $table;
+    }
+    protected function getTable(){
+      if ($this->table) {
+        return $this->table;
       } else {
         $path          = explode(':', $this->getName());
         $presenter     = array_pop($path);
@@ -62,8 +131,5 @@
   
         return $table;
       }
-    }
-    protected function createComponentDatatable() {
-      return new \App\Common\Components\Layout\Datatable();
     }
   }

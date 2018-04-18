@@ -10,13 +10,11 @@
       <div class="panel-body">
         <div class="dataTables_wrapper form-inline dt-bootstrap no-footer"
         >
-          {control datatable
-        id      => 'user_datatable' ,
-        columns => 'user_id, login'}
+          {control datatable}
         </div>
         <!-- /.panel-body -->
       </div>
     </div>
   </div>
   {/block}
-{define datatableScripts}{control datatable:script id => 'user_group_datatable'}{/define}
+{define datatableScripts}{control datatable:script}{/define}
