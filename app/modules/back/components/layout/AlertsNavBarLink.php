@@ -12,7 +12,6 @@
   class AlertsNavBarLink extends Control
   {
     
-  
     public function render(...$args) {
       $template = $this->template;
       $template->setFile(__DIR__ .'/templates/alertsNavBarLink.latte');

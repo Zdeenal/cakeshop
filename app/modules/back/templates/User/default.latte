@@ -1,9 +1,22 @@
 {block content}
-  <div class="row">
-    <div class="col-lg-12">
-      <h1 class="page-header">Seznam uživatelů</h1>
-
-
+<div class="row">
+  <div class="col-lg-12">
+    <h1 class="page-header">Seznam uživatelů</h1>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        Seznam skupin uživatelů
+      </div>
+      <!-- /.panel-heading -->
+      <div class="panel-body">
+        <div class="dataTables_wrapper form-inline dt-bootstrap no-footer"
+        >
+          {control datatable
+        id      => 'user_datatable' ,
+        columns => 'user_id, login'}
+        </div>
+        <!-- /.panel-body -->
+      </div>
     </div>
   </div>
-{/block}
+  {/block}
+{define datatableScripts}{control datatable:script id => 'user_group_datatable'}{/define}

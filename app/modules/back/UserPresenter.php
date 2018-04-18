@@ -2,6 +2,7 @@
   
   namespace App\Back\Presenters;
   
+  use App\Traits\DatatableTrait;
   use Nette;
   
   /**
@@ -12,6 +13,9 @@
    */
   class UserPresenter extends BasePresenter
   {
+    use DatatableTrait;
+    /** @var bool Do use Datatables plugin */
+    protected $datatables = TRUE;
     
     /** @var Nette\Database\Context */
     private $database;

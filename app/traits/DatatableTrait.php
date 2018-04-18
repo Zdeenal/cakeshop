@@ -14,7 +14,13 @@
    */
   trait DatatableTrait
   {
+    
   
+    protected function beforeRender() {
+      parent::beforeRender();
+      $this->template->datatableTemplate = $this->webDir->getAppPath() . 'modules/common/components/datatable/datatable.latte';
+    }
+    
     public function actiongetData() {
       $table = $this->getTableName();
       $response    = [];
@@ -56,5 +62,8 @@
   
         return $table;
       }
+    }
+    protected function createComponentDatatable() {
+      return new \App\Common\Components\Layout\Datatable();
     }
   }
