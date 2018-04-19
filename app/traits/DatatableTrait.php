@@ -4,6 +4,7 @@
   use App\Helpers\Datatable;
   use Nette\Application\Responses\JsonResponse;
   use Nette\Database\Table\ActiveRow;
+  use Nette\Database\Table\Selection;
   use Nette\Utils\Arrays;
   use Tracy\Dumper;
 
@@ -31,7 +32,10 @@
       parent::beforeRender();
       $this->template->datatableTemplate = $this->webDir->getAppPath() . 'modules/common/components/datatable/datatable.latte';
     }
-    
+  
+    /**
+     * @return mixed
+     */
     public function actiongetData() {
       $table = $this->getTable();
       $response    = [];
@@ -42,10 +46,9 @@
         $this->getTable(),
         $this->columnsWithOperators
       );
-      
-      
       $items      = $this->database->table($table);
       $totalCount = $items->count();
+      $primaryKey = $items->getPrimary();
       if ($queryParams['order']) {$items->order($queryParams['order']);}
       if ($queryParams['limit']) {$items->limit($queryParams['limit']);}
       if ($queryParams['where']) {$items->where($queryParams['where']['query'], ...$queryParams['where']['values']);}
@@ -68,6 +71,7 @@
           },explode('.', Datatable::getRealColumn($column, $this->getDataColumns())));
           $values[$column] = $value;
         }
+        $values['DT_RowId'] = $item->$primaryKey;
         $response [] = $values;
         ++$count;
       }
@@ -150,6 +154,13 @@
      */
     public function setDTActions($actions) {
       $this->actions = $actions;
+    }
+  
+    /**
+     * @return array
+     */
+    public function getActions() {
+      return $this->actions;
     }
     
     /**

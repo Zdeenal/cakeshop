@@ -32,7 +32,7 @@
         ];
       }
       $template->columns = $columns;
-      $template->actions = '<button class="btn btn-theme"><i class="fa fa-pencil"</button>';
+      $template->actions = $this->presenter->getActions();
       $template->setFile(__DIR__. '/script.latte');
       $template->render();
     }

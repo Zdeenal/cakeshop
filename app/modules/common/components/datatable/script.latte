@@ -19,12 +19,14 @@ $(document).ready(function(){
     }
     },
     columns: {$columns},
+    {if count($actions)}
     columnDefs: [ {
       targets: -1,
       orderable: false,
       data: null,
       defaultContent: {$actions}
     } ]
+    {/if}
   });
 });
 </script>
