@@ -115,13 +115,18 @@
   
     
   
-    public function getDataColumns($flatten = FALSE) {
+    public function getDataColumns($flatten = FALSE, $includeActions = FALSE) {
       $columns = array_map(function($item){
         if(is_array($item) && Arrays::get($item, 'column')) {
           return $item['column'];
         } else {
           return $item;
         }}, $this->columns);
+      
+      if($includeActions && $this->actions) {
+        $columns[] = '';
+      }
+      
       if ($flatten) {
         return array_map(function($item){
           $exploded = explode('.' , $item);
@@ -132,7 +137,11 @@
     }
   
     public function getHeaders() {
-      return $this->columns ? array_keys($this->columns) : [];
+      $columns = $this->columns ? array_keys($this->columns) : [];
+      if ($this->actions) {
+        $columns[] = 'Akce';
+      }
+      return $columns;
     }
   
   

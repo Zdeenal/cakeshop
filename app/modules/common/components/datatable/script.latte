@@ -20,10 +20,11 @@ $(document).ready(function(){
     },
     columns: {$columns},
     columnDefs: [ {
-    targets: -1,
-    data: null,
-    defaultContent: "<button>Click!</button>"
-  } ],
+      targets: -1,
+      orderable: false,
+      data: null,
+      defaultContent: {$actions}
+    } ]
   });
 });
 </script>

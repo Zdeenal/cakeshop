@@ -26,12 +26,13 @@
       $template = $this->template;
       $template->id = $this->presenter->getId(TRUE);
       $columns = [];
-      foreach ($this->presenter->getDataColumns(TRUE) as $column) {
+      foreach ($this->presenter->getDataColumns(TRUE, TRUE) as $column) {
         $columns[] = [
           'data' => $column
         ];
       }
       $template->columns = $columns;
+      $template->actions = '<button class="btn btn-theme"><i class="fa fa-pencil"</button>';
       $template->setFile(__DIR__. '/script.latte');
       $template->render();
     }

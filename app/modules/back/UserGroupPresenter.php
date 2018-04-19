@@ -30,7 +30,7 @@
       $this->setDTColumns([
         'Id skupiny'  => ['column' => 'user_group_id', 'prefixTableName' => TRUE, 'operator' => '='],
         'Název'       => ['column' => 'name', 'prefixTableName' => TRUE ],
-        'Rodič'       => 'parent_group.name',
+        'Rodič'       => 'parent_group.name'
        ]
       );
       $this->setDTActions([
