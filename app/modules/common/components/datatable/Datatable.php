@@ -1,6 +1,7 @@
 <?php
   
   namespace App\Common\Components\Layout;
+  use Nette\Application\Responses\JsonResponse;
   use Nette\Application\UI\Control;
   use Nette\Utils\Arrays;
   use Tracy\Dumper;
@@ -39,5 +40,9 @@
   
     public function handleGetData() {
       return $this->presenter->actionGetData();
+    }
+  
+    public function handleAction() {
+        return new JsonResponse(['test']);
     }
   }

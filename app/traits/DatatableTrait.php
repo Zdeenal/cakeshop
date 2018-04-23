@@ -160,7 +160,15 @@
      * @return array
      */
     public function getActions() {
-      return $this->actions;
+      $html = '';
+      foreach ($this->actions as $action) {
+        $html .= '<a
+         href="' . $action['action'] . '"
+         class="ajax">
+         ' . $action['button'] . '</a>';
+      }
+      
+      return $html;
     }
     
     /**

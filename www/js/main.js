@@ -33,8 +33,32 @@ Nette.showFormErrors = function(form, errors) {
 
 $(document).ready(function(){
 
+  $.nette.init();
+  $.nette.ext("modals", {
+    before : function(jqXHR, settings) {
+      var id = $(settings.nette.e.target).closest('tr').attr('id');
+
+      if (id) {
+        settings.url = settings.url + '/?rowId=' + id + '&test=test';
+      }
+    },
+    success: function(payload) {
+      if (payload.redirect) {
+        $("#page-modal").modal("hide");
+      } else if(payload.isModal) {
+        $('#page-modal').modal('show');
+      }
+    }
+  });
+
+  $.nette.ext("ajaxRedirect", {
+    success: function (payload) {
+      if (payload.redirect) {
+        $.nette.ajax(payload.redirect);
+      }
+    }
+  });
   /** Side menu opened submanu triger class adjustment */
   $('#side-menu li ul li a.active').parents('li').addClass('active');
-
 
 });

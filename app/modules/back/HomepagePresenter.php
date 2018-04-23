@@ -23,5 +23,14 @@
       $this->database = $database;
     }
   
+    public function handleTest() {
+      if ($this->isAjax()) {
+          $this->payload->isModal = TRUE;
+          $this->redrawControl('modal');
+      } else {
+        $this->redirect('this');
+      }
+      
+    }
   
   }

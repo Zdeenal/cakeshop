@@ -4,9 +4,12 @@ $(document).ready(function(){
   var handler = table.data('handler');
   var columns = table.data('table-columns') ? table.data('table-columns').split(',') : [];
 
+  table.on( 'init.dt', function () {
+        $.nette.load();
+  } );
   table.dataTable( {
     language: {
-      url: '//cdn.datatables.net/plug-ins/1.10.16/i18n/Czech.json'
+      url: '//cdn.datatables.net/plug-ins/1.10.16/i18n/Czech.json',
     },
 
     processing: true,
@@ -29,4 +32,10 @@ $(document).ready(function(){
     {/if}
   });
 });
+
+function handleAction(element) {
+  var rowId = $(element).closest('tr').attr('id');
+  var link = $(element).data('link') + '?id=' + rowId;
+  location.replace(link);
+}
 </script>

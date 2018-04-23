@@ -4,7 +4,8 @@
   
   use App\Traits\DatatableTrait;
   use Nette;
-  
+  use Tracy\Dumper;
+
   /**
    * Class UserGroup
    *
@@ -35,15 +36,30 @@
       );
       $this->setDTActions([
         'edit' => [
-          'button' => '<button class="btn btn-theme"><i class="fa fa-pencil"</button>',
+          'button' => '<button class="btn btn-theme"><i class="fa fa-pencil"></i></button>',
           'action' => $this->link('edit')
         ],
         'delete' => [
-          'button' => '<button class="btn btn-warning"><i class="fa fa-trash"</button>',
+          'button' => '<button class="btn btn-warning"><i class="fa fa-trash"></i></button>',
           'action' => $this->link('delete')
         ]
       ]);
     }
   
+    public function actionEdit() {
+      $id = $this->getParameter('rowId');
+        if ($this->isAjax()) {
+          $this->payload->isModal = TRUE;
+          $this->template->group = $this->database->table('user_groups')->get($id);
+          $this->redrawControl('modal');
+        }
+      }
+  
+    public function actionDelete() {
+      if ($this->isAjax()) {
+        $this->payload->isModal = TRUE;
+        $this->redrawControl('modal');
+      }
+    }
   
   }
