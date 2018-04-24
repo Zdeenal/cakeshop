@@ -36,6 +36,7 @@ $(document).ready(function(){
   $.nette.init();
   $.nette.ext("modals", {
     before : function(jqXHR, settings) {
+      console.log('ajax');
       var id = $(settings.nette.e.target).closest('tr').attr('id');
 
       if (id) {

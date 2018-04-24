@@ -7,9 +7,14 @@ $(document).ready(function(){
   table.on( 'init.dt', function () {
         $.nette.load();
   } );
+
+  table.on( 'draw.dt', function () {
+    $.nette.load();
+  } );
+
   table.dataTable( {
-    language: {
-      url: '//cdn.datatables.net/plug-ins/1.10.16/i18n/Czech.json',
+    oLanguage: {
+      sUrl: {$language},
     },
     processing: true,
     serverSide: true,

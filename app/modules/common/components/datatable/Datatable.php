@@ -15,11 +15,13 @@
   class Datatable extends Control
   {
     public function render() {
+      $language = $this->presenter->getLanguage();
       $template = $this->template;
       $template->id = $this->presenter->getId();
       $template->columns = implode(',' , $this->presenter->getDataColumns(TRUE));
       $template->buttons = $this->presenter->getButtons();
       $template->headers = $this->presenter->getHeaders();
+      $template->language = $language;
       $template->setFile(__DIR__. '/controll.latte');
       $template->render();
     }

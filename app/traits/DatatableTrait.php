@@ -30,7 +30,6 @@
   
     protected function beforeRender() {
       parent::beforeRender();
-      $this->template->datatableTemplate = $this->webDir->getAppPath() . 'modules/common/components/datatable/datatable.latte';
     }
   
     /**
@@ -210,5 +209,11 @@
   
         return $table;
       }
+    }
+  
+    public function getLanguage($country = 'czech') {
+      
+      return '../../admin_theme/vendor/datatables/languages/' . $country . '.json';
+    
     }
   }
