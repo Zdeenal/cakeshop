@@ -36,21 +36,38 @@
       );
       $this->setDTActions([
         'edit' => [
-          'button' => '<button class="btn btn-theme"><i class="fa fa-pencil"></i></button>',
+          'button' => '<button title="Upravit skupinu" class="btn btn-theme-datatable btn-sm"><i class="fa fa-pencil"></i></button>',
           'action' => $this->link('edit')
         ],
         'delete' => [
-          'button' => '<button class="btn btn-warning"><i class="fa fa-trash"></i></button>',
+          'button' => '<button title="Smazat skupinu" class="btn btn-theme-datatable btn-sm"><i class="fa fa-trash"></i></button>',
           'action' => $this->link('delete')
+        ]
+      ]);
+      
+      $this->setDTButtons([
+        'add' => [
+          'class' => 'btn btn-circle btn-theme',
+          'title' => 'Přidat skupinu',
+          'text' => 'Přidat skupinu',
+          'action' => '',
+          'icon' => 'plus',
+          'action' => $this->link('edit')
         ]
       ]);
     }
   
     public function actionEdit() {
       $id = $this->getParameter('rowId');
+      $group = $this->database->table('user_groups')->get($id);
+      $this->template->title = $group ?
+        "Editovat skupinu" :
+        "Přidat skupinu";
+      $this->template->group = $group;
+      $this->template->modal = FALSE;
         if ($this->isAjax()) {
+          $this->template->modal = TRUE;
           $this->payload->isModal = TRUE;
-          $this->template->group = $this->database->table('user_groups')->get($id);
           $this->redrawControl('modal');
         }
       }

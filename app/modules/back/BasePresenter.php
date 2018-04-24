@@ -160,7 +160,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
     $this->scripts[] = ['src' => $this->getBasePath() . '/admin_theme/vendor/datatables/js/jquery.dataTables.min.js', 'preload' => TRUE];
     $this->scripts[] = ['src' => $this->getBasePath() . '/admin_theme/vendor/datatables-plugins/dataTables.bootstrap.min.js', 'preload' => TRUE];
     $this->scripts[] = ['src' => $this->getBasePath() . '/admin_theme/vendor/datatables-responsive/dataTables.responsive.js', 'preload' => TRUE];
-  
   }
   
   private function addPresenterStyles() {

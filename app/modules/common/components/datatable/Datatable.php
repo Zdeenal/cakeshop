@@ -18,6 +18,7 @@
       $template = $this->template;
       $template->id = $this->presenter->getId();
       $template->columns = implode(',' , $this->presenter->getDataColumns(TRUE));
+      $template->buttons = $this->presenter->getButtons();
       $template->headers = $this->presenter->getHeaders();
       $template->setFile(__DIR__. '/controll.latte');
       $template->render();
@@ -41,8 +42,5 @@
     public function handleGetData() {
       return $this->presenter->actionGetData();
     }
-  
-    public function handleAction() {
-        return new JsonResponse(['test']);
-    }
+    
   }

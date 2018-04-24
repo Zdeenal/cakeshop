@@ -62,3 +62,11 @@ $(document).ready(function(){
   $('#side-menu li ul li a.active').parents('li').addClass('active');
 
 });
+
+function animateClick(element, animation) {
+  var element =$(element).find('button');
+  element.removeClass('vivify ' + animation);
+  setTimeout(function(){
+  element.addClass('vivify ' + animation);
+  },100);
+}

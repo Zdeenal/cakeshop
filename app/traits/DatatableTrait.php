@@ -24,7 +24,7 @@
     protected $columns = [];
     protected $columnsToPrefix = [];
     protected $columnsWithOperators = [];
-    
+    protected $buttons = [];
     protected $actions = [];
     
   
@@ -170,7 +170,15 @@
       
       return $html;
     }
-    
+  
+    public function setDTButtons($buttons) {
+      $this->buttons = $buttons;
+    }
+  
+  
+    public function getButtons() {
+      return $this->buttons;
+    }
     /**
      * @param string $id
      */

@@ -1,4 +1,15 @@
-{block title}Editovat skupinu <strong>&rdquo; {$group->name} &bdquo;</strong>{/block}
-{block modal}
-
+{block title}
+  {$title} <span n:if="$group">{$group->name}</span>
 {/block}
+{block content}
+{ifset #modal}
+<div class="row">
+  <div class="col-lg-12">
+  {block modal}
+    <h1 n:if="!$modal" class="page-header">{$title} <strong n:if="$group">&rdquo; {$group->name} &bdquo;</strong></h1>
+    <h3 n:if="$modal" n:define="modalHeader" >{$title} <strong n:if="$group">&rdquo; {$group->name} &bdquo;</strong></h3>
+  {/block}
+{/ifset}
+  </div>
+</div>
+
