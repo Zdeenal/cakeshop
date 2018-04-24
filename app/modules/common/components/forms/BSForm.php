@@ -2,7 +2,7 @@
   namespace App\Common\Components\Forms;
   use Nette\Application\UI\Form,
       Nette\Forms\Controls;
-  
+  use Tracy\Dumper;
 
 
   /**
@@ -25,8 +25,11 @@
       $renderer->wrappers['control']['errorcontainer'] = 'span class=help-block';
       foreach ($this->getControls() as $control) {
         if ($control instanceof Controls\Button) {
-          $control->getControlPrototype()->addClass(empty($usedPrimary) ? 'btn btn-primary' : 'btn btn-default');
+          $control->getControlPrototype()->addClass(empty($usedPrimary) ? 'btn btn-theme' : 'btn btn-theme-invert');
           $usedPrimary = TRUE;
+          if ($control->getName() == 'cancel') {
+            $control->setAttribute('onClick','goBack(this, "' . $this->getPresenter()->link(':') . '")');
+          }
         } elseif ($control instanceof Controls\TextBase || $control instanceof Controls\SelectBox || $control instanceof Controls\MultiSelectBox) {
           $control->getControlPrototype()->addClass('form-control');
         } elseif ($control instanceof Controls\Checkbox || $control instanceof Controls\CheckboxList || $control instanceof Controls\RadioList) {
@@ -34,6 +37,10 @@
         }
       }
       parent::render($args);
+    }
+    
+    public function isAjax() {
+      $this->getElementPrototype()->setAttribute('class', 'ajax');
     }
   
   }

@@ -41,7 +41,8 @@
         }
       }
       $params['order'] = implode( ', ',$params['order']);
-      $params['limit'] = $datatablesRequest['length'] . ', ' . $datatablesRequest['start'];
+      $params['limit'] = $datatablesRequest['length'];
+      $params['offset'] =$datatablesRequest['start'];
       return $params;
     }
   

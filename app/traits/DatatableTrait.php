@@ -48,11 +48,12 @@
       $items      = $this->database->table($table);
       $totalCount = $items->count();
       $primaryKey = $items->getPrimary();
-      if ($queryParams['order']) {$items->order($queryParams['order']);}
-      if ($queryParams['limit']) {$items->limit($queryParams['limit']);}
       if ($queryParams['where']) {$items->where($queryParams['where']['query'], ...$queryParams['where']['values']);}
-        
-      $count = 0;
+      $count = $items->count();
+      if ($queryParams['order']) {$items->order($queryParams['order']);}
+      if ($queryParams['limit']) {$items->limit($queryParams['limit'],$queryParams['offset']);}
+      
+      
       foreach ($items as $item) {
         $values = [];
         foreach ($this->getParameters()['tableColumns'] as $column) {
@@ -72,13 +73,13 @@
         }
         $values['DT_RowId'] = $item->$primaryKey;
         $response [] = $values;
-        ++$count;
       }
       return
       $this->sendResponse(new JsonResponse(
         [
           'iTotalRecords'=> $totalCount,
           'iTotalDisplayRecords'=> $count,
+          'draw' => $this->getParameter('draw'),
           'data' => $response
         ]
       ));

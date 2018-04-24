@@ -32,11 +32,10 @@ Nette.showFormErrors = function(form, errors) {
 };
 
 $(document).ready(function(){
-
+  $('#example').dataTable();
   $.nette.init();
   $.nette.ext("modals", {
     before : function(jqXHR, settings) {
-      console.log('ajax');
       var id = $(settings.nette.e.target).closest('tr').attr('id');
 
       if (id) {
@@ -44,6 +43,11 @@ $(document).ready(function(){
       }
     },
     success: function(payload) {
+      $("#page-modal").on("hidden.bs.modal", function () {
+        var tableId = $('.dataTable').first().attr('id');
+        $('#' + tableId).dataTable().api().ajax.reload(undefined,false);
+
+      });
       if (payload.redirect) {
         $("#page-modal").modal("hide");
       } else if(payload.isModal) {
@@ -70,4 +74,13 @@ function animateClick(element, animation) {
   setTimeout(function(){
   element.addClass('vivify ' + animation);
   },100);
+}
+
+function goBack(element, backTo) {
+  var modal = $(element).closest('.modal');
+  if (modal.length) {
+    modal.modal('hide');
+  } else {
+    location.replace(backTo);
+  }
 }

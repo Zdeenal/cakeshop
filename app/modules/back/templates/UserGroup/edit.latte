@@ -8,6 +8,11 @@
   {block modal}
     <h1 n:if="!$modal" class="page-header">{$title} <strong n:if="$group">&rdquo; {$group->name} &bdquo;</strong></h1>
     <h3 n:if="$modal" n:define="modalHeader" >{$title} <strong n:if="$group">&rdquo; {$group->name} &bdquo;</strong></h3>
+    <div class="row">
+      <div n:class="!$modal ? col-md-6" >
+      {control userGroupForm}
+      </div>
+    </div>
   {/block}
 {/ifset}
   </div>

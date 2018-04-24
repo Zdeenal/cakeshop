@@ -2,6 +2,7 @@
   
   namespace App\Back\Presenters;
   
+  use App\Common\Components\Forms\BSForm;
   use App\Traits\DatatableTrait;
   use Nette;
   use Tracy\Dumper;
@@ -56,6 +57,16 @@
         ]
       ]);
     }
+    
+    protected function createComponentUserGroupForm() {
+        $form = new BSForm();
+        $form->isAjax();
+        $form->addHidden('user_group_id');
+        $form->addText('name','Název')->setRequired('Musíte vyplnit název');
+        $form->onSuccess[] = [$this, 'userGroupFormSubmit'];
+        return $form;
+        
+    }
   
     public function actionEdit() {
       $id = $this->getParameter('rowId');
@@ -65,17 +76,51 @@
         "Přidat skupinu";
       $this->template->group = $group;
       $this->template->modal = FALSE;
-        if ($this->isAjax()) {
-          $this->template->modal = TRUE;
-          $this->payload->isModal = TRUE;
-          $this->redrawControl('modal');
-        }
+      
+      $groups = $this->database->table('user_groups')->select('user_group_id, name');
+      if ($group) {
+        $groups->where('user_group_id != ?', $group->user_group_id);
       }
+      $this['userGroupForm']->addSelect('parent_group_id','Rodič',
+        [NULL => ''] + $groups->fetchPairs('user_group_id', 'name'));
+      if ($group) {
+        $this['userGroupForm']->setDefaults($group);
+      }
+  
+  
+      $this['userGroupForm']->addSubmit('submit','Uložit');
+      $this['userGroupForm']->addButton('cancel','Zrušit')->setOmitted(TRUE);
+      
+      if ($this->isAjax()) {
+        $this->template->modal = TRUE;
+        $this->payload->isModal = TRUE;
+        $this->redrawControl('modal');
+      }
+    }
   
     public function actionDelete() {
       if ($this->isAjax()) {
         $this->payload->isModal = TRUE;
         $this->redrawControl('modal');
+      }
+    }
+  
+    public function userGroupFormSubmit(Nette\Application\UI\Form $form, \stdClass $values) {
+      $values = array_map(function($item){return $item ? $item : NULL;},(array)$values);
+      try {
+        if ($id = Nette\Utils\Arrays::get($values, 'user_group_id')) {
+          $this->database->table('user_groups')->where('user_group_id = ?', $id)->update($values);
+        } else {
+          $this->database->table('user_groups')->insert($values);
+        }
+      } catch (Exception $e) {
+      
+      }
+      
+      if ($this->isAjax()) {
+          $this->redrawControl('modal');
+      } else {
+        $this->redirect(301, ':');
       }
     }
   

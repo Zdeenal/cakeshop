@@ -12,6 +12,7 @@ $(document).ready(function(){
     $.nette.load();
   } );
 
+
   table.dataTable( {
     oLanguage: {
       sUrl: {$language},
@@ -19,10 +20,13 @@ $(document).ready(function(){
     processing: true,
     serverSide: true,
     deferRender: true,
+    paging: true,
+    lengthMenu: [10, 25, 50, 75, 100],
     ajax: {
     url: handler,
     data: function(d) {
       d.tableColumns = columns;
+      d.tableId = {$id}
     }
     },
     columns: {$columns},

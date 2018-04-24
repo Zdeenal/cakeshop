@@ -15,9 +15,10 @@
   class HomepagePresenter extends BasePresenter
   {
     
-    
     /** @var Nette\Database\Context */
     private $database;
+    
+    protected $datatables = TRUE;
     
     public function __construct(Nette\Database\Context $database) {
       $this->database = $database;
