@@ -24,6 +24,13 @@
 <body>
 
 	<div id="wrapper">
+
+		{snippet flashMessages}
+			<script n:inner-foreach="$flashes as $flash">
+        flashMessage({$flash->message}, {$flash->type});
+			</script>
+		{/snippet}
+
 		{if $presenter->isIncludeMenu()}
 		<nav class="navbar navbar-default navbar-static-top">
 

@@ -118,7 +118,8 @@
       }
       
       if ($this->isAjax()) {
-          $this->redrawControl('modal');
+        $this->payload->closeModal = TRUE;
+        $this->sendPayload();
       } else {
         $this->redirect(301, ':');
       }

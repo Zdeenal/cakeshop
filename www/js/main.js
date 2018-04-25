@@ -39,7 +39,7 @@ $(document).ready(function(){
       var id = $(settings.nette.e.target).closest('tr').attr('id');
 
       if (id) {
-        settings.url = settings.url + '/?rowId=' + id + '&test=test';
+        settings.url = settings.url + '/?rowId=' + id;
       }
     },
     success: function(payload) {
@@ -48,7 +48,7 @@ $(document).ready(function(){
         $('#' + tableId).dataTable().api().ajax.reload(undefined,false);
 
       });
-      if (payload.redirect) {
+      if (payload.redirect || payload.closeModal) {
         $("#page-modal").modal("hide");
       } else if(payload.isModal) {
         $('#page-modal').modal('show');
