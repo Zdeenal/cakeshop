@@ -25,12 +25,6 @@
 
 	<div id="wrapper">
 
-		{snippet flashMessages}
-			<script n:inner-foreach="$flashes as $flash">
-        flashMessage({$flash->message}, {$flash->type});
-			</script>
-		{/snippet}
-
 		{if $presenter->isIncludeMenu()}
 		<nav class="navbar navbar-default navbar-static-top">
 
@@ -61,7 +55,6 @@
 		</div>
 		</div>
 
-	{snippetArea}
 		{snippet modal}
 			{if $presenter->isAjax()}
 				{ifset #modal}
@@ -90,7 +83,6 @@
 				{/ifset}
 			{/if}
 		{/snippet}
-	{/snippetArea}
 	{block scripts}
 	{** Scripts *}
 		<script n:foreach="$scripts as $script"  src="{$script['src']}" ></script>
@@ -98,5 +90,12 @@
 	{block datatableScripts}
 	{/block}
 	</div>
+	{snippet flashes}
+		<span n:foreach="$flashes as $flash"
+			class="flash-message"
+			data-message="{$flash->message}"
+			data-type="{$flash->type}">
+		</span>
+	{/snippet}
 </body>
 </html>

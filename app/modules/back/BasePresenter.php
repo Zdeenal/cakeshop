@@ -115,6 +115,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
       ['href' => $this->getBasePath() . '/admin_theme/less/sb-admin-2.css', 'preload' => TRUE],
       ['href' => $this->getBasePath() . '/admin_theme/vendor/font-awesome/css/font-awesome.min.css', 'preload' => FALSE],
       ['href' => $this->getBasePath() . '/css/libs/vivify.css', 'preload' => FALSE],
+      ['href' => $this->getBasePath() . '/css/libs/toastr.css', 'preload' => FALSE],
       ['href' => $this->getBasePath() . '/css/style.css', 'preload' => TRUE],
     ];
    foreach ($defaultStyles as $style) {
@@ -138,6 +139,8 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
       ['src' => $this->getBasePath() . '/admin_theme/dist/js/sb-admin-2.js', 'preload' => TRUE],
       ['src' => '//nette.github.io/resources/js/netteForms.min.js', 'preload' => TRUE],
       ['src' => $this->getBasePath() . '/js/libs/nette.ajax.js', 'preload' => TRUE],
+      ['src' => $this->getBasePath() . '/js/libs/toastr.js', 'preload' => TRUE],
+      ['src' => $this->getBasePath() . '/js/libs/bootbox.min.js', 'preload' => TRUE],
       ['src' => $this->getBasePath() . '/js/main.js', 'preload' => TRUE],
     ];
     foreach ($defaultScripts as $script) {
@@ -182,5 +185,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
       }
     }
   }
+  
   
 }

@@ -3,6 +3,7 @@
   namespace App\Back\Presenters;
   
   use App\Common\Components\Forms\BSForm;
+  use App\Helpers\Strings;
   use App\Traits\DatatableTrait;
   use Nette;
   use Tracy\Dumper;
@@ -15,6 +16,10 @@
    */
   class UserGroupPresenter extends BasePresenter
   {
+    
+    const _SUCCESS_MESSAGE = ['message' => 'Uživatel {NAME} byl uložen.', 'type' => 'success'];
+    const _FAIL_MESSAGE = ['message' => 'Uživatel {NAME} nebyl uložen!', 'type' => 'error'];
+    
     use DatatableTrait;
   
     /** @var bool Do use Datatables plugin */
@@ -30,7 +35,6 @@
     protected function startup() {
       parent::startup();
       $this->setDTColumns([
-        'Id skupiny'  => ['column' => 'user_group_id', 'prefixTableName' => TRUE, 'operator' => '='],
         'Název'       => ['column' => 'name', 'prefixTableName' => TRUE ],
         'Rodič'       => 'parent_group.name'
        ]
@@ -42,7 +46,7 @@
         ],
         'delete' => [
           'button' => '<button title="Smazat skupinu" class="btn btn-theme-datatable btn-sm"><i class="fa fa-trash"></i></button>',
-          'action' => $this->link('delete')
+          'action' => $this->link('delete!')
         ]
       ]);
       
@@ -98,10 +102,33 @@
       }
     }
   
-    public function actionDelete() {
-      if ($this->isAjax()) {
-        $this->payload->isModal = TRUE;
-        $this->redrawControl('modal');
+    public function handledelete() {
+      $id = $this->getParameter('rowId');
+      if (!$this->isAjax() || $this->getParameter('confirmed')) {
+        if ($this->isAjax()) {
+            $this->payload->success = TRUE;
+          $this->sendPayload();
+        }
+      } else {
+        if ($this->isAjax()) {
+          $message = ' ';
+          $group = $this->database->table('user_groups')->get($id)->toArray();
+          $childGroups = $this->database->table('user_groups')->where('parent_group_id = ?', $id);
+          if ($childGroups->count()) {
+            $message .= '<strong>Je rodičem pro tyto skupiny:</strong><ul class="list-inline">';
+              foreach ( $childGroups as $childGroup) {
+                $message .= '<li>' . $childGroup->name .'</li>';
+              }
+            $message .= '</ul>';
+          }
+          
+          $this->payload->id = $id;
+          $this->payload->prompt = [
+            'title'   => Strings::placeholders($group,'Opravdu chcete smazat skupinu {NAME} ?'),
+            'message' => $message
+          ];
+          $this->sendPayload();
+        }
       }
     }
   
@@ -114,13 +141,22 @@
           $this->database->table('user_groups')->insert($values);
         }
       } catch (Exception $e) {
-      
+        if ($this->isAjax()) {
+          $this->payload->closeModal = TRUE;
+          $this->payload->messages[] = Strings::placeholders($values,self::_FAIL_MESSAGE);
+          $this->sendPayload();
+        } else {
+          $this->flashMessage(...Strings::placeholders($values,self::_FAIL_MESSAGE));
+          $this->redirect(301, ':');
+        }
       }
       
       if ($this->isAjax()) {
         $this->payload->closeModal = TRUE;
+        $this->payload->messages[] = Strings::placeholders($values,self::_SUCCESS_MESSAGE);
         $this->sendPayload();
       } else {
+        $this->flashMessage(...Strings::placeholders($values,self::_SUCCESS_MESSAGE));
         $this->redirect(301, ':');
       }
     }
