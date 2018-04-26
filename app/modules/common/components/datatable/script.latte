@@ -42,9 +42,4 @@ $(document).ready(function(){
   });
 });
 
-function handleAction(element) {
-  var rowId = $(element).closest('tr').attr('id');
-  var link = $(element).data('link') + '?id=' + rowId;
-  location.replace(link);
-}
 </script>

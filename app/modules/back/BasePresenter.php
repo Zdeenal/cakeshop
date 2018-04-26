@@ -42,14 +42,17 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
   
   protected function startup() {
     parent::startup();
+    
     $this->addDefaultPreloads();
     $this->addDefaultStyles();
     $this->addDefaultScripts();
+  
     if ($this->datatables) {
       $this->useDatatables();
     }
     $this->addPresenterStyles();
     $this->addPresenterScripts();
+    $this->addScript(['src' => $this->getBasePath() . '/js/main.js', 'preload' => TRUE]);
     $this->checkAuth();
   }
   
@@ -104,7 +107,8 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
   }
   
   protected function getBasePath() {
-    return $this->getHttpRequest()->getUrl()->getBasePath();
+    $path =$this->getHttpRequest()->getUrl()->getBasePath();
+    return $path !== '/' ? $path : 'http://cakeshop.zhtools.cz/www/';
   }
   
   protected function addDefaultStyles() {
@@ -141,7 +145,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
       ['src' => $this->getBasePath() . '/js/libs/nette.ajax.js', 'preload' => TRUE],
       ['src' => $this->getBasePath() . '/js/libs/toastr.js', 'preload' => TRUE],
       ['src' => $this->getBasePath() . '/js/libs/bootbox.min.js', 'preload' => TRUE],
-      ['src' => $this->getBasePath() . '/js/main.js', 'preload' => TRUE],
     ];
     foreach ($defaultScripts as $script) {
       $this->addScript($script);
