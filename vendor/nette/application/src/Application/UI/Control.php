@@ -93,6 +93,7 @@ abstract class Control extends Component implements IRenderable
 		];
 		$this->getTemplate()->flashes = $messages;
 		$this->getPresenter()->getFlashSession()->$id = $messages;
+    $this->getPresenter()->payload->messages[] = ['message' => $message, 'type' => $type];
 		return $flash;
 	}
 

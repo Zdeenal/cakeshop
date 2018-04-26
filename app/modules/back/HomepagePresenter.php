@@ -30,7 +30,7 @@
   
     public function handleFire() {
       if ($this->isAjax()) {
-        $this->payload->messages[] = ['message' => 'Test', 'type' => 'info'];
+        $this->flashMessage('test');
         $this->sendPayload();
       } else {
         $this->redirect('this');

@@ -2,6 +2,7 @@
   
   namespace App\Helpers;
   use Nette\Utils\Arrays;
+  use Tracy\Dumper;
 
   /**
    * Class String  ...
@@ -13,10 +14,11 @@
   {
    
     public static function placeholders($variables, $input) {
-      if (is_array($input) && Arrays::get($input,'message')) {
-        
+      if (is_array($input)) {
         foreach ($variables as $key => $value) {
-          $input['message'] = str_replace('{' . strtoupper($key) . '}', $value, $input['message']);
+          foreach ($input as $inKey => $inValue) {
+            $input[$inKey] = str_replace('{' . strtoupper($key) . '}', $value, $input[$inKey]);
+          }
         }
       } else {
         foreach ($variables as $key => $value) {

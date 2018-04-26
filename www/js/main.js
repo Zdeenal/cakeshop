@@ -77,6 +77,9 @@ $(document).ready(function(){
             $.ajax({
                 url: settings.url + '&rowId=' + payload.id + '&confirmed=true',
                 success : function(payload) {
+                  if (payload.messages) {
+                    showFlashes(payload.messages)
+                  }
                   if(payload.success) {
                     reloadDatables();
                   }
@@ -138,6 +141,10 @@ function showFlashes(messages) {
 }
 
 function callPrompt(title,message, callback) {
+  if (!message) {
+    message = title;
+    title = '';
+  }
   bootbox.confirm({
     title: title,
     message: message,

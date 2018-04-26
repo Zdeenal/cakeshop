@@ -17,8 +17,11 @@
   class UserGroupPresenter extends BasePresenter
   {
     
-    const _SUCCESS_MESSAGE = ['message' => 'Uživatel {NAME} byl uložen.', 'type' => 'success'];
-    const _FAIL_MESSAGE = ['message' => 'Uživatel {NAME} nebyl uložen!', 'type' => 'error'];
+    const _SUCCESS_MESSAGE = ['Skupina {NAME} byla uložena.','success'];
+    const _FAIL_MESSAGE = ['Chyba! Skupina {NAME} nebyla uložena!', 'error'];
+  
+    const _SUCCESS_DELETE_MESSAGE = ['Skupina {NAME} byla odstraněna.','success'];
+    const _FAIL_DELETE_MESSAGE = ['Chyba! Skupina {NAME} nebyla odstraněna!', 'error'];
     
     use DatatableTrait;
   
@@ -104,22 +107,63 @@
   
     public function handledelete() {
       $id = $this->getParameter('rowId');
+      
+      /** CONFIRMED */
       if (!$this->isAjax() || $this->getParameter('confirmed')) {
+        $group = $this->database->table('user_groups')->get($id);
+        try {
+          $this->database->table('user_groups')
+            ->where('parent_group_id = ?', $group->user_group_id)
+            ->update(['parent_group_id' => NULL]);
+
+          $this->database->table('users')
+            ->where('user_group_id = ?', $group->user_group_id)
+            ->update(['user_group_id' => NULL]);
+
+          $this->database->table('user_groups')
+            ->where('user_group_id = ?', $group->user_group_id)
+            ->delete();
+          
+          
+        } catch (Exception $e) {
+          $this->flashMessage(...Strings::placeholders($group->toArray(),self::_FAIL_DELETE_MESSAGE));
+          if ($this->isAjax()) {
+            $this->payload->success = FALSE;
+            $this->sendPayload();
+          } else {
+            $this->redirect(301, ':');
+          }
+        }
+  
+        $this->flashMessage(...Strings::placeholders($group->toArray(),self::_SUCCESS_DELETE_MESSAGE));
         if ($this->isAjax()) {
             $this->payload->success = TRUE;
           $this->sendPayload();
+        } else {
+          $this->redirect(301, ':');
         }
+      
+        /** PROMPT*/
       } else {
         if ($this->isAjax()) {
-          $message = ' ';
+          $message = '';
           $group = $this->database->table('user_groups')->get($id)->toArray();
           $childGroups = $this->database->table('user_groups')->where('parent_group_id = ?', $id);
           if ($childGroups->count()) {
-            $message .= '<strong>Je rodičem pro tyto skupiny:</strong><ul class="list-inline">';
+            $message .= '<div><strong>Je rodičem pro tyto skupiny:</strong><ul class="list-no-marks">';
               foreach ( $childGroups as $childGroup) {
                 $message .= '<li>' . $childGroup->name .'</li>';
               }
-            $message .= '</ul>';
+            $message .= '</ul></div>';
+          }
+  
+          $users = $this->database->table('users')->where('user_group_id = ?', $id);
+          if ($users->count()) {
+            $message .= '<div><strong>Je použita u těchto uživatelů:</strong><ul class="list-no-marks">';
+            foreach ( $users as $user) {
+              $message .= '<li>' . $user->username .'</li>';
+            }
+            $message .= '</ul></div>';
           }
           
           $this->payload->id = $id;
@@ -141,22 +185,20 @@
           $this->database->table('user_groups')->insert($values);
         }
       } catch (Exception $e) {
+        $this->flashMessage(...Strings::placeholders($values,self::_FAIL_MESSAGE));
         if ($this->isAjax()) {
           $this->payload->closeModal = TRUE;
-          $this->payload->messages[] = Strings::placeholders($values,self::_FAIL_MESSAGE);
           $this->sendPayload();
         } else {
-          $this->flashMessage(...Strings::placeholders($values,self::_FAIL_MESSAGE));
           $this->redirect(301, ':');
         }
       }
       
+      $this->flashMessage(...Strings::placeholders($values,self::_SUCCESS_MESSAGE));
       if ($this->isAjax()) {
         $this->payload->closeModal = TRUE;
-        $this->payload->messages[] = Strings::placeholders($values,self::_SUCCESS_MESSAGE);
         $this->sendPayload();
       } else {
-        $this->flashMessage(...Strings::placeholders($values,self::_SUCCESS_MESSAGE));
         $this->redirect(301, ':');
       }
     }
