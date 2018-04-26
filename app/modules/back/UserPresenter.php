@@ -2,6 +2,7 @@
   
   namespace App\Back\Presenters;
   
+  use App\Back\Models\UserModel;
   use App\Traits\DatatableTrait;
   use Nette;
   
@@ -17,11 +18,12 @@
     /** @var bool Do use Datatables plugin */
     protected $datatables = TRUE;
     
-    /** @var Nette\Database\Context */
-    private $database;
+    /** @var UserModel */
+    protected $model;
     
-    public function __construct(Nette\Database\Context $database) {
-      $this->database = $database;
+    
+    public function __construct(UserModel $model) {
+      $this->model = $model;
     }
     
     protected function startup() {

@@ -4,9 +4,7 @@
   use App\Helpers\Datatable;
   use Nette\Application\Responses\JsonResponse;
   use Nette\Database\Table\ActiveRow;
-  use Nette\Database\Table\Selection;
   use Nette\Utils\Arrays;
-  use Tracy\Dumper;
 
 
   /**
@@ -18,7 +16,6 @@
    */
   trait DatatableTrait
   {
-    protected $table = '';
     protected $id = '';
     
     protected $columns = [];
@@ -36,16 +33,15 @@
      * @return mixed
      */
     public function actiongetData() {
-      $table = $this->getTable();
       $response    = [];
       $queryParams = Datatable::prepareQueryParams(
         $this->getParameters(),
         $this->getDataColumns(),
         $this->columnsToPrefix ,
-        $this->getTable(),
+        $this->model->getTableName(),
         $this->columnsWithOperators
       );
-      $items      = $this->database->table($table);
+      $items      = $this->model->getAllItems();
       $totalCount = $items->count();
       $primaryKey = $items->getPrimary();
       if ($queryParams['where']) {$items->where($queryParams['where']['query'], ...$queryParams['where']['values']);}
@@ -196,21 +192,7 @@
       return $id;
     }
     
-    public function setDTTable($table) {
-      $this->table = $table;
-    }
-    protected function getTable(){
-      if ($this->table) {
-        return $this->table;
-      } else {
-        $path          = explode(':', $this->getName());
-        $presenter     = array_pop($path);
-        $tableSingular = strtolower(preg_replace('/([a-zA-Z])(?=[A-Z])/', '$1_', $presenter));
-        $table         = substr($tableSingular, -1) == 's' ? $tableSingular : $tableSingular . 's';
-  
-        return $table;
-      }
-    }
+    
   
     public function getLanguage($country = 'czech') {
       

@@ -186,5 +186,17 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
     }
   }
   
+  protected function finishWithPayload($payload = [], $redirect = [301, ':']) {
+    if ($this->isAjax()) {
+      foreach ($payload as $key => $value) {
+        $this->payload->$key = $value;
+      }
+      $this->sendPayload();
+    } else {
+      $this->redirect(...$redirect);
+    }
+  
+  }
+  
   
 }
