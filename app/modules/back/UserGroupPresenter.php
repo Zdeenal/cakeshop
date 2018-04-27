@@ -102,7 +102,7 @@
     public function handledelete() {
       $id = $this->getParameter('rowId');
       $this->actionDelete(
-        'Opravdu chcete smazat uživatele {USERNAME} ?',
+        'Opravdu chcete smazat skupinu {NAME} ?',
         UserGroupModel::_SUCCESS_DELETE_MESSAGE,
         UserGroupModel::_FAIL_DELETE_MESSAGE,
         ['message' => $this->model->getDeleteMessage($id) . $this->userModel->getDeleteMessageForUserGroup($id)]);
