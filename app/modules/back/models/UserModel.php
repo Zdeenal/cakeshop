@@ -13,8 +13,13 @@
     use DatatableModelTrait;
   
   
+    const _SUCCESS_MESSAGE = ['Uživatel {USERNAME} byl uložen.','success'];
+    const _FAIL_MESSAGE = ['Chyba! Uživatel {USERNAME} nebyl uložen!', 'error'];
+    
     const _SUCCESS_DELETE_MESSAGE = ['Uživatel {USERNAME} byl odstraněn.','success'];
     const _FAIL_DELETE_MESSAGE = ['Chyba! Uživatel {USERNAME} nebyl odstraněn!', 'error'];
+  
+    const _FAIL_DUPLICITY_NAME_MESSAGE = ['Chyba! Uživatel s loginem `{USERNAME}` již existuje!', 'error'];
   
     /**
      *
