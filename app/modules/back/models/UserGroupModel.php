@@ -10,6 +10,7 @@
    */
   class UserGroupModel
   {
+    use DatatableModelTrait;
   
     const _SUCCESS_MESSAGE = ['Skupina {NAME} byla uložena.','success'];
     const _FAIL_MESSAGE = ['Chyba! Skupina {NAME} nebyla uložena!', 'error'];
@@ -18,9 +19,11 @@
     const _FAIL_DELETE_MESSAGE = ['Chyba! Skupina {NAME} nebyla odstraněna!', 'error'];
   
     const _FAIL_DUPLICITY_NAME_MESSAGE = ['Chyba! Skupina {NAME} již existuje!', 'error'];
-    
-    use DatatableModelTrait;
   
+    /**
+     * Overrides DatatableModelTrait->delete() function
+     * @param Nette\Database\Table\ActiveRow $group
+     */
     public function delete(Nette\Database\Table\ActiveRow $group) {
       $this->db->table('user_groups')
         ->where('parent_group_id = ?', $group->user_group_id)
@@ -35,6 +38,12 @@
         ->delete();
     }
   
+    /**
+     * Return message with child groups of given user group id
+     * @param $id
+     *
+     * @return string
+     */
     public function getDeleteMessage($id) {
       $message = '';
   
@@ -46,8 +55,6 @@
         }
         $message .= '</ul></div>';
       }
-      
       return $message;
-    
     }
   }

@@ -1,9 +1,8 @@
 <?php
   namespace App\Back\Models;
   use App\Traits\DatatableModelTrait;
-  use Nette;
   /**
-   * Class UserModel  ...
+   * Class UserModel
    *
    * @author  Zdeněk Houdek
    * @created 26.04.2018
@@ -11,7 +10,6 @@
   class UserModel
   {
     use DatatableModelTrait;
-  
   
     const _SUCCESS_MESSAGE = ['Uživatel {USERNAME} byl uložen.','success'];
     const _FAIL_MESSAGE = ['Chyba! Uživatel {USERNAME} nebyl uložen!', 'error'];
@@ -22,7 +20,7 @@
     const _FAIL_DUPLICITY_NAME_MESSAGE = ['Chyba! Uživatel s loginem `{USERNAME}` již existuje!', 'error'];
   
     /**
-     *
+     * Get message of all users for given user group id
      * @param $id
      *
      * @return string
@@ -38,5 +36,12 @@
         $message .= '</ul></div>';
       }
       return $message;
+    }
+  
+    /**
+     * Overrides DatatableModelTrait->delete() function
+     */
+    public function delete() {
+      
     }
   }

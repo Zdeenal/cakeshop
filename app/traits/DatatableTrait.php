@@ -2,13 +2,16 @@
   
   namespace App\Traits;
   use App\Helpers\Datatable;
+  use App\Helpers\Strings;
   use Nette\Application\Responses\JsonResponse;
   use Nette\Database\Table\ActiveRow;
   use Nette\Utils\Arrays;
 
 
   /**
-   * Trait DatatableTrait reprezentující ...
+   * Trait DatatableTrait
+   *
+   * Extending presenter with datatable functionality
    *
    * @author    Zdeněk Houdek
    * @copyright © 2018, Proclient s.r.o.
@@ -16,24 +19,33 @@
    */
   trait DatatableTrait
   {
+    /** @var string datatable id selector */
     protected $id = '';
-    
-    protected $columns = [];
-    protected $columnsToPrefix = [];
-    protected $columnsWithOperators = [];
-    protected $buttons = [];
-    protected $actions = [];
-    
   
-    protected function beforeRender() {
-      parent::beforeRender();
-    }
+    /** @var array columns with definitions */
+    protected $columns = [];
+    
+    /** @var array columns that should be prefixed with table name */
+    protected $columnsToPrefix = [];
+    
+    /** @var array columns with other operator then LIKE */
+    protected $columnsWithOperators = [];
+    
+    /** @var array buttons definition */
+    protected $buttons = [];
+    
+    /** @var array actions definition */
+    protected $actions = [];
+  
   
     /**
+     * Returns payload with data for datatable js
      * @return mixed
      */
     public function actiongetData() {
       $response    = [];
+      
+      // Prepare paremeters for data selection [where, order, limit, offset]
       $queryParams = Datatable::prepareQueryParams(
         $this->getParameters(),
         $this->getDataColumns(),
@@ -49,7 +61,7 @@
       if ($queryParams['order']) {$items->order($queryParams['order']);}
       if ($queryParams['limit']) {$items->limit($queryParams['limit'],$queryParams['offset']);}
       
-      
+      // Get values from database selection of Active rows
       foreach ($items as $item) {
         $values = [];
         foreach ($this->getParameters()['tableColumns'] as $column) {
@@ -70,6 +82,8 @@
         $values['DT_RowId'] = $item->$primaryKey;
         $response [] = $values;
       }
+      
+      // Send data
       return
       $this->sendResponse(new JsonResponse(
         [
@@ -81,11 +95,16 @@
       ));
     }
   
+    /**
+     * Create datatable component
+     * @return \App\Common\Components\Layout\Datatable
+     */
     protected function createComponentDatatable() {
       return new \App\Common\Components\Layout\Datatable();
     }
   
     /**
+     * Parse columns definitions
      * @param array $columns
      */
     public function setDTColumns($columns) {
@@ -103,18 +122,22 @@
         }
       }
     }
-    
-    
   
     /**
+     * Columns getter
      * @return array
      */
     public function getColumns() {
       return $this->columns;
     }
   
-    
-  
+    /**
+     * Returns data property values
+     * @param bool $flatten
+     * @param bool $includeActions
+     *
+     * @return array
+     */
     public function getDataColumns($flatten = FALSE, $includeActions = FALSE) {
       $columns = array_map(function($item){
         if(is_array($item) && Arrays::get($item, 'column')) {
@@ -136,6 +159,10 @@
       return $columns ? array_values($columns) : [];
     }
   
+    /**
+     * Returns headers
+     * @return array
+     */
     public function getHeaders() {
       $columns = $this->columns ? array_keys($this->columns) : [];
       if ($this->actions) {
@@ -143,9 +170,9 @@
       }
       return $columns;
     }
-  
-  
+    
     /**
+     * Actions setter
      * @param array $actions
      */
     public function setDTActions($actions) {
@@ -153,6 +180,7 @@
     }
   
     /**
+     * Build action buttons Html
      * @return array
      */
     public function getActions() {
@@ -167,21 +195,32 @@
       return $html;
     }
   
+    /**
+     * Buttons Setter
+     * @param $buttons
+     */
     public function setDTButtons($buttons) {
       $this->buttons = $buttons;
     }
   
-  
+    /**
+     * Buttons getter
+     * @return array
+     */
     public function getButtons() {
       return $this->buttons;
     }
+    
     /**
+     * Id selector setter
      * @param string $id
      */
     public function setDTId($id) {
       $this->id = $id;
     }
+    
     /**
+     * Returns datatable id selector
      * @return string
      */
     public function getId($withSelector = FALSE) {
@@ -191,12 +230,56 @@
       }
       return $id;
     }
-    
-    
   
+    /**
+     * Returns translation filePath
+     * @param string $country
+     *
+     * @return string
+     */
     public function getLanguage($country = 'czech') {
-      
       return '../../admin_theme/vendor/datatables/languages/' . $country . '.json';
+    }
+  
+    /**
+     * Perform prompted delete action with given settings
+     * @param       $promptQuestion
+     * @param       $successMessage
+     * @param       $failMessage
+     * @param array $promptData
+     */
+    protected function actionDelete($promptQuestion , $successMessage, $failMessage , $promptData = []) {
+      $id = $this->getParameter('rowId');
+      /** CONFIRMED */
+      if (!$this->isAjax() || $this->getParameter('confirmed')) {
+        $item = $this->model->getItemById($id);
+        try {
+          $this->model->delete($item);
+        } catch (Exception $e) {
+          $this->flashMessage(...Strings::placeholders($item->toArray(),$failMessage));
+          $this->finishWithPayload(['success' => FALSE]);
+        }
+        $this->flashMessage(...Strings::placeholders($item->toArray(),$successMessage));
+        $this->finishWithPayload(['success' => TRUE]);
+    
+        /** PROMPT*/
+      } else {
+        if ($this->isAjax()) {
+          $item = $this->model->getItemById($id)->toArray();
+          $prompt = [
+            'title'   => Strings::placeholders($item,$promptQuestion),
+          ] + $promptData;
+          
+          $this->finishWithPayload(
+            [
+              'id' => $id,
+              'prompt' => $prompt
+            ]
+          );
+        }
+      }
     
     }
+    
+    
   }
