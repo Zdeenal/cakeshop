@@ -13,6 +13,9 @@
     use DatatableModelTrait;
   
   
+    const _SUCCESS_DELETE_MESSAGE = ['Uživatel {USERNAME} byl odstraněn.','success'];
+    const _FAIL_DELETE_MESSAGE = ['Chyba! Uživatel {USERNAME} nebyl odstraněn!', 'error'];
+  
     /**
      *
      * @param $id
