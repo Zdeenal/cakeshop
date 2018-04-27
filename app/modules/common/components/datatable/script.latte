@@ -1,3 +1,4 @@
+
 <script>
 $(document).ready(function(){
   var table = $({$id});
@@ -30,7 +31,7 @@ $(document).ready(function(){
     }
     },
     columns: {$columns},
-    {if count($actions)}
+    {if $actions}
     columnDefs: [ {
       targets: -1,
       orderable: false,

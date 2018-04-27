@@ -81,10 +81,12 @@
      * @return BSForm
      */
     protected function createComponentUserGroupForm() {
+     
         $form = new BSForm();
         $form->isAjax();
         $form->addHidden('user_group_id');
-        $form->addText('name','Název')->setRequired('Musíte vyplnit název');
+        $form->addText('name','Název')
+          ->setRequired('Musíte vyplnit název');
         $form->onSuccess[] = [$this, 'userGroupFormSubmit'];
         return $form;
         
@@ -164,6 +166,12 @@
      */
     public function userGroupFormSubmit(Nette\Application\UI\Form $form, \stdClass $values) {
       $values = array_map(function($item){return $item ? $item : NULL;},(array)$values);
+      
+      /** Unique name*/
+      if (!$this->model->checkUniqueValue($values, 'name')) {
+        $this->flashMessage(...Strings::placeholders($values,UserGroupModel::_FAIL_DUPLICITY_NAME_MESSAGE));
+        $this->finishWithPayload();
+      }
       try {
         $this->model->store($values);
       } catch (Exception $e) {
@@ -175,3 +183,5 @@
     }
   
   }
+
+  

@@ -16,6 +16,8 @@
   
     const _SUCCESS_DELETE_MESSAGE = ['Skupina {NAME} byla odstraněna.','success'];
     const _FAIL_DELETE_MESSAGE = ['Chyba! Skupina {NAME} nebyla odstraněna!', 'error'];
+  
+    const _FAIL_DUPLICITY_NAME_MESSAGE = ['Chyba! Skupina {NAME} již existuje!', 'error'];
     
     use DatatableModelTrait;
   

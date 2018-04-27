@@ -3,7 +3,6 @@ Nette.showFormErrors = function(form, errors) {
   $(form).find('.error').remove();
   $(form).find('.form-group').removeClass('has-error');
   $(form).find('.help-block').remove();
-  console.log(errors);
   var messages = [],
       focusElem;
 

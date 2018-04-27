@@ -27,7 +27,7 @@
     
     public function getTableName(){
       if ($this->tableName) {
-        return $this-tableName;
+        return $this->tableName;
       } else {
         $path          = explode(':', $this->getName());
         $presenter     = array_pop($path);
@@ -60,7 +60,7 @@
     }
   
     public function store($values) {
-      $primaryKey = $this->db->table($this->getTableName())->getPrimary();
+      $primaryKey = $this->getPrimaryKey();
       if ($id = Arrays::get($values, $primaryKey )) {
         $this->getAllItems()->where($primaryKey .' = ?', $id)->update($values);
       } else {
@@ -74,6 +74,18 @@
       } else {
         $table = $this->db->table($this->getTableName());
         $table->delete($item->$table->getPrimary());
+      }
+    }
+    protected function getPrimaryKey() {
+      return $this->db->table($this->getTableName())->getPrimary();
+    }
+  
+    public function checkUniqueValue($values, $key) {
+      $value = Arrays::get($values , $key, FALSE);
+      if (!$value || !is_null(Arrays::get($values,$this->getPrimaryKey()))) {
+        return true;
+      } else {
+        return !$this->db->table($this->getTableName())->where($key . ' = ?', $value)->count();
       }
     }
   }
