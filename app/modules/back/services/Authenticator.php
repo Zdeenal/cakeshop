@@ -5,6 +5,7 @@
   use Nette\Security\IAuthenticator;
   use Nette\Security\Identity;
   use Nette\Security\Passwords;
+  use Tracy\Dumper;
 
   /**
    * Class Authenticator  ...
@@ -26,6 +27,7 @@
       $row = $this->database->table('users')
         ->where('username', $username)->fetch();
   
+      
       if (!$row) {
         throw new AuthenticationException('Neexistující uživatel ' . $username . '.');
       }
@@ -43,8 +45,8 @@
           'password' => Passwords::hash($password),
         ));
       }
-  
-      return new Identity($row->user_id, $row->user_group->name, ['username' => $row->username]);
+      $group = $row->user_group_id ? $row->user_group->name : 'guest';
+      return new Identity($row->user_id, $group, ['username' => $row->username]);
     }
   
   }
