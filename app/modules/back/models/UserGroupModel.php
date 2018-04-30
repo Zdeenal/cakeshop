@@ -57,4 +57,15 @@
       }
       return $message;
     }
+  
+    public function getRoles($userGroupId, $roles = []) {
+      if ($group = $this->db->table('user_groups')->get($userGroupId)) {
+        $roles[] = $group->name;
+        $children =$this->db->table('user_groups')->where('parent_group_id = ?', $group->user_group_id);
+        foreach ( $children as $childGroup) {
+          $roles = $this->getRoles($childGroup->user_group_id, $roles);
+        }
+      }
+      return $roles;
+    }
   }

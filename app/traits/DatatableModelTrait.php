@@ -60,8 +60,14 @@
      * Create all items selection
      * @return \Nette\Database\Table\Selection
      */
-    public function getAllItems() {
-      return $this->db->table($this->getTableName());
+    public function getAllItems($where = []) {
+      $table = $this->db->table($this->getTableName());
+      if ($where) {
+        foreach ($where as $condition => $values) {
+          $table->where($condition, ...$values);
+        }
+      }
+      return $table;
     }
   
     /**
@@ -83,8 +89,8 @@
      *
      * @return array
      */
-    public function getPairsForSelect($valueGetter, $textGetter, $excludeId = NULL, $defaultValue = [NULL => ''] ) {
-      $items = $this->getAllItems()->select($valueGetter . ',' . $textGetter);
+    public function getPairsForSelect($valueGetter, $textGetter, $excludeId = NULL, $defaultValue = [NULL => ''], $conditions = [] ) {
+      $items = $this->getAllItems($conditions)->select($valueGetter . ',' . $textGetter);
       if ($excludeId) {
         $items->where($items->getPrimary() .' != ?', $excludeId);
       }
@@ -113,8 +119,7 @@
       if ($byMark) {
         $item->update(['deleted' => 1]);
       } else {
-        $table = $this->db->table($this->getTableName());
-        $table->delete($item->$table->getPrimary());
+        $item->delete();
       }
     }
   

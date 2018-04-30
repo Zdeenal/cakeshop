@@ -1,5 +1,6 @@
 <?php
   namespace App\Back\Services;
+  use App\Back\Models\UserGroupModel;
   use Nette\Database\Context;
   use Nette\Security\AuthenticationException;
   use Nette\Security\IAuthenticator;
@@ -18,8 +19,13 @@
     /** @var Context */
     public $database;
     
-    public function __construct(Context $database) {
+    /** @var UserGroupModel */
+    private $userGroupModel;
+    
+    
+    public function __construct(Context $database, UserGroupModel $userGroupModel) {
       $this->database = $database;
+      $this->userGroupModel = $userGroupModel;
     }
     
     function authenticate(array $credentials) {
@@ -37,7 +43,7 @@
       }
 
       elseif (!in_array($row->module->name, ['back','common'])) {
-        throw new AuthenticationException('Invalid user module.');
+        throw new AuthenticationException('Uživatel patří do modulu ' . $row->module->description . '.');
       }
       
       elseif (Passwords::needsRehash($row->password)) {
@@ -45,8 +51,8 @@
           'password' => Passwords::hash($password),
         ));
       }
-      $group = $row->user_group_id ? $row->user_group->name : 'guest';
-      return new Identity($row->user_id, $group, ['username' => $row->username]);
+      $groups = $this->userGroupModel->getRoles($row->user_group_id);
+      return new Identity($row->user_id, $groups ? $groups : 'guest', ['username' => $row->username]);
     }
   
   }

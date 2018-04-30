@@ -1,6 +1,8 @@
 <?php
   namespace App\Back\Models;
   use App\Traits\DatatableModelTrait;
+  use Tracy\Dumper;
+
   /**
    * Class UserModel
    *
@@ -36,12 +38,5 @@
         $message .= '</ul></div>';
       }
       return $message;
-    }
-  
-    /**
-     * Overrides DatatableModelTrait->delete() function
-     */
-    public function delete() {
-      
     }
   }

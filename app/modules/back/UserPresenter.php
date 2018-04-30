@@ -2,10 +2,15 @@
   
   namespace App\Back\Presenters;
   
+  use App\Back\Models\UserGroupModel;
   use App\Back\Models\UserModel;
+  use App\Common\Components\Forms\BSForm;
+  use App\Common\Models\ModuleModel;
+  use App\Helpers\Strings;
   use App\Traits\DatatableTrait;
   use Nette;
-  
+  use Tracy\Dumper;
+
   /**
    * Class UserPresenter
    * Administration of users
@@ -20,16 +25,25 @@
     
     /** @var bool Do use Datatables plugin */
     protected $datatables = TRUE;
+    
     /** @var UserModel */
     protected $model;
+    
+    /** @var UserGroupModel */
+    protected $userGroupModel;
+    
+    /** @var ModuleModel */
+    protected $moduleModel;
   
     /**
      * UserPresenter constructor.
      *
      * @param UserModel $model
      */
-    public function __construct(UserModel $model) {
+    public function __construct(UserModel $model, UserGroupModel $userGroupModel, ModuleModel $moduleModel) {
       $this->model = $model;
+      $this->userGroupModel = $userGroupModel;
+      $this->moduleModel = $moduleModel;
     }
     
     /**
@@ -42,7 +56,7 @@
       $this->setDTColumns([
         'Uživatelské jméno' => 'username',
         'Skupina'           => 'user_group.name',
-        'Modul'             => ['column' => 'module.name', 'operator' => '=']
+        'Modul'             => ['column' => 'module.description', 'operator' => '=']
       ]);
       $this->setDTActions([
         'edit'   => [
@@ -75,7 +89,22 @@
       $this->template->title = $user ? "Editovat uživatele" : "Přidat uživatele";
       $this->template->user  = $user;
       $this->template->modal = FALSE;
-      
+  
+      $this['userForm']->addSelect('user_group_id', 'Skupina', $this->userGroupModel->getPairsForSelect(
+        'user_group_id',
+        'name',
+        FALSE));
+      $this['userForm']->addSelect('module_id', 'Modul', $this->moduleModel->getPairsForSelect(
+        'module_id',
+        'description',
+        FALSE,
+        FALSE,
+        ['display = ?' =>[1]]));
+      if ($user) {
+        $this['userForm']->setDefaults($user);
+      }
+      $this['userForm']->addSubmit('submit', 'Uložit');
+      $this['userForm']->addButton('cancel', 'Zrušit')->setOmitted(TRUE);
       
       if ($this->isAjax()) {
         $this->template->modal  = TRUE;
@@ -91,5 +120,45 @@
       $this->actionDelete('Opravdu chcete smazat uživatele {USERNAME} ?',
         UserModel::_SUCCESS_DELETE_MESSAGE,
         UserModel::_FAIL_DELETE_MESSAGE);
+    }
+  
+    /**
+     * Edit/Add form
+     *
+     * @return BSForm
+     */
+    protected function createComponentUserForm() {
+      $form = new BSForm();
+      $form->isAjax();
+      $form->addHidden('user_id');
+      $form->addText('username', 'Uživatelské jméno')->setRequired('Musíte vyplnit uživatelské jméno');
+      $form->onSuccess[] = [$this, 'userFormSubmit'];
+      return $form;
+    }
+  
+    /**
+     *
+     * Edit/Add form submited action
+     *
+     * @param Nette\Application\UI\Form $form
+     * @param \stdClass                 $values
+     *
+     * @throws Nette\Application\AbortException
+     */
+    public function userFormSubmit(Nette\Application\UI\Form $form, \stdClass $values) {
+      $values = array_map(function ($item) {
+        return $item ? $item : NULL;
+      }, (array)$values);
+      try {
+        $this->model->store($values);
+      } catch (Nette\Database\UniqueConstraintViolationException $e) {
+        $this->flashMessage(...Strings::placeholders($values, UserGroupModel::_FAIL_DUPLICITY_NAME_MESSAGE));
+        $this->finishWithPayload();
+      } catch (Exception $e) {
+        $this->flashMessage(...Strings::placeholders($values, UserGroupModel::_FAIL_MESSAGE));
+        $this->finishWithPayload(['closeModal' => TRUE]);
+      }
+      $this->flashMessage(...Strings::placeholders($values, UserGroupModel::_SUCCESS_MESSAGE));
+      $this->finishWithPayload(['closeModal' => TRUE]);
     }
   }

@@ -25,6 +25,7 @@ services:
 	-   App\Back\Factories\NavBarLinksFactory
 	-   App\Back\Models\UserGroupModel
 	-   App\Back\Models\UserModel
+	-   App\Common\Models\ModuleModel
 	-
 	     factory: App\Back\Services\Authenticator
 	     autowired: self

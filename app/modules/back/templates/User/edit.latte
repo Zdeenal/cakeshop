@@ -10,7 +10,7 @@
     <h3 n:if="$modal" n:define="modalHeader" >{$title} <strong n:if="$user">&rdquo; {$user->username} &bdquo;</strong></h3>
     <div class="row">
       <div n:class="!$modal ? col-md-6" >
-
+        {control userForm}
       </div>
     </div>
   {/block}
