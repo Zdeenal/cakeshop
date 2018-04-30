@@ -136,14 +136,11 @@
       $values = array_map(function ($item) {
         return $item ? $item : NULL;
       }, (array)$values);
-      
-      /** Unique name*/
-      if (!$this->model->checkUniqueValue($values, 'name')) {
-        $this->flashMessage(...Strings::placeholders($values, UserGroupModel::_FAIL_DUPLICITY_NAME_MESSAGE));
-        $this->finishWithPayload();
-      }
       try {
         $this->model->store($values);
+      } catch (Nette\Database\UniqueConstraintViolationException $e) {
+        $this->flashMessage(...Strings::placeholders($values, UserGroupModel::_FAIL_DUPLICITY_NAME_MESSAGE));
+        $this->finishWithPayload();
       } catch (Exception $e) {
         $this->flashMessage(...Strings::placeholders($values, UserGroupModel::_FAIL_MESSAGE));
         $this->finishWithPayload(['closeModal' => TRUE]);
